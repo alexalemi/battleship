@@ -51,6 +51,7 @@ class Game:
         self.remaininghealth = 0
         self.FailWhale = 0
         self.time = 0
+        self.info = {}
 
         self.moves = ""
 
@@ -228,7 +229,7 @@ class Game:
             self.firstplayer = 1
         else:
             self.firstplayer = 0
-        print "Game started between %s and %s" % (self.playernames[0],self.playernames[1])
+        print "Game started between %s and %s" % (self.playernames[self.firstplayer],self.playernames[1*(self.firstplayer==0)])
         starttime = time.time()
         self.makeboards()
     
@@ -246,6 +247,7 @@ class Game:
 
             record = [0,0]
             record[self.winner] = 1
+            gameinfo = self.info
 
             print "Game took %f sec" % (finishtime-starttime)
             self.reinit()
@@ -253,12 +255,15 @@ class Game:
             print "FAILWHALE"
             record = [0,0]
             record[self.winner] =1
+
+            gameinfo = self.info
+
             self.reinit()
                
             
 
         
-        return record    
+        return record, gameinfo
             
             
         
@@ -298,15 +303,16 @@ class Game:
 
         starttime = time.time()
         for i in range(eachside):
-            newrecord = self.playgame()
+            newrecord, gameinfo = self.playgame()
             record[0] += newrecord[0]
             record[1] += newrecord[1]
-            gamedicts.append(self.info)
+            gamedicts.append(gameinfo)
         for i in range(eachside):
-            newrecord = self.playgame(reverse=True)
+            print "REVERSED GAME"
+            newrecord, gameinfo = self.playgame(reverse=True)
             record[0] += newrecord[0]
             record[1] += newrecord[1]
-            gamedicts.append(self.info)
+            gamedicts.append(gameinfo)
         
         finishtime = time.time()
         print "Playoff finished. Took %f seconds" % (finishtime- starttime)
@@ -325,7 +331,7 @@ def launchgames(player1,player2, N=10):
     Q = Game(player1,player2)
     record, gamedicts = Q.playgames(N)
     
-    print "OUTPUT @@%s@@" % str(gamedicts)
+    #print "OUTPUT @@%s@@" % str(gamedicts)
     
     return record, gamedicts
 

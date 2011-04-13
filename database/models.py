@@ -3,7 +3,7 @@ from elixir import *
 from datetime import datetime
 
 metadata.bind = "sqlite:///data.db"
-metadata.bind.echo= True
+#metadata.bind.echo= True
 
 
 class Program(Entity):
@@ -64,3 +64,7 @@ class Game(Entity):
     remaininghealth = Field(Integer)
     
     failwhale = Field(Boolean)
+
+
+    def __repr__(self):
+        return "<%s> vs <%s>, won by <%s>" % (self.player1.name,self.player2.name,self.winner.name)
