@@ -19,7 +19,7 @@ class ProgramPlayer:
         self.name = name
         print "Opening %s" % PATHTOPROGS + self.name
         #self.child = pexpect.spawn( '/bin/bash ' + PATHTOPROGS +self.name)
-        self.child = pexpect.spawn( PATHTOPROGS +self.name)
+        self.child = pexpect.spawn( PATHTOPROGS +self.name, logfile=sys.stderr)
         self.child.delaybeforesend= 0
 	self.child.expect('>')
         
@@ -140,7 +140,7 @@ class ProgramPlayer:
 
 
 
-    def newboard(self,opponentname = ''):
+    def newboard(self,opponentname = 'blank'):
         """ Asks the program to generate a new board"""
         self.send('N ' + opponentname)
         
@@ -217,7 +217,7 @@ class ProgramPlayer:
             print "|"
         print "-"*23
         
-    def genboard(self,opponentname=''):
+    def genboard(self,opponentname='blank'):
         """Generates the internal representation of your board """
         myboard = self.newboard(opponentname)
         self.boardstring = myboard
@@ -268,13 +268,14 @@ class ProgramPlayer:
             
             if status[0] == 'M':
                 self.guessboard[coord] = '0'
+                self.result(status)
             elif status[0] == 'H':
                 self.guessboard[coord] = 'X'
-            
+                self.result(status)
             elif status[0] == 'S':
                 self.guessboard[coord] = 'X'
                 self.opponentsships.remove(status[-1])
-                
+                self.result(status)
             self.lastguess = ''
             
                 

@@ -1,4 +1,4 @@
-REMOTE_SCRIPT_DIR = '/home/Grads/2009/aalemi/battleship/'
+REMOTE_SCRIPT_DIR = '/home/Grads/2009/aalemi/battleship/battleship/'
 
 STARTING_GATE_PATH = REMOTE_SCRIPT_DIR + 'media/startinggate/'
 PLAYER_PATH = REMOTE_SCRIPT_DIR + 'media/players/'

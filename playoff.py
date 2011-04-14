@@ -4,8 +4,8 @@ from database.models import *
 setup_all()
 
 
-def playoff(name1,name2):
-    results, gameinfodict = launchgames(name1,name2)
+def playoff(name1,name2,N=10):
+    results, gameinfodict = launchgames(name1,name2,N)
     
     for gameinfo in gameinfodict:
         

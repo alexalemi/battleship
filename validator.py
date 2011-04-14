@@ -1,8 +1,10 @@
 from database.models import *
 setup_all()
 
+from datetime import datetime
+
 from compilers import py_comp, c_comp, cpp_comp, octave_comp, perl_comp, java_comp
-COMPILER_DICT = {'python':  py_comp , 'c': c_comp , 'c++' : cpp_comp , 'octave': octave_comp , 'perl' : perl_comp , 'java': java_comp }
+COMPILER_DICT = {'python':  py_comp , 'c': c_comp , 'cpp' : cpp_comp , 'octave': octave_comp , 'perl' : perl_comp , 'java': java_comp }
 
 from scripts.tester import myprogramtester
 
@@ -17,8 +19,22 @@ def validate_script(name, src, helperfile, language, **kwargs):
     programdict['src'] = src
     programdict['helperfile'] = helperfile
     programdict['language'] = language
+    
+    if 'description' in kwargs:
+        programdict['description'] = kwargs['description']
+    if 'author' in kwargs:
+        programdict['author'] = kwargs['author']
 
-    p = Program(**programdict)
+    if 'update' in kwargs:
+        p = Program.query.filter_by(name=name).one()
+        programdict['timestamp'] = datetime.now()
+        p.set(**programdict)
+
+        for g in p.firstplayergames + p.secondplayergames:
+            g.valid = False
+    else:
+        p = Program(**programdict)
+    
     session.commit()
 
     comp = COMPILER_DICT[language]

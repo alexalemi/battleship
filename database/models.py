@@ -9,12 +9,16 @@ metadata.bind = "sqlite:///data.db"
 class Program(Entity):
     name = Field(String(30), unique=True)
     description = Field(String(300), default="")
+    author = Field(String(30))
+    
     src = Field(Text)
     helperfile = Field(Boolean)
     language = Field(String(30))
     valid = Field(Boolean, default=False)
     failwhale = Field(Boolean)
     failures = Field(Integer)
+
+    timestamp = Field(DateTime, default=datetime.now())
     
     
     rating = Field(Float,default = 1500)
@@ -64,6 +68,8 @@ class Game(Entity):
     remaininghealth = Field(Integer)
     
     failwhale = Field(Boolean)
+
+    valid = Field(Boolean,default=True)
 
 
     def __repr__(self):
