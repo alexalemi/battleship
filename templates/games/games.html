@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %} Games - Battleship {% endblock %}
+
+{% block content %}
+
+
+{% for group in games|groupby('player1') %}
+    <div id="item">
+    <h1> <a href="programs/{{ group.grouper.name }}.html">{{ group.grouper.name }}</a> </h1> <br />
+    <div style="padding-left: 1em;">
+    <ul>    
+        {% for group2 in group.list|groupby('player2') %}
+        <li> <h3> vs <a href="programs//{{ group2.grouper.name }}.html">{{ group2.grouper.name }}</a> </h3> <br>
+            <p> Games by id: 
+            
+                
+                    {% for item in group2.list %} 
+                    |
+                     <a href="games/{{ item.id }}.html"> 
+                    {% if item.winner.name==item.player1.name %} 
+                    <span style="color: green">
+                    {% else %} <span style="color: red" > 
+                    {% endif %}
+                    {{ item.id }} 
+                    </span>                    
+                    </a> 
+
+                 
+                    {% endfor %}
+            </p>
+            <br />
+        {% endfor %}
+    </ul>
+    </div>
+
+    </div> <br />
+{% endfor %}
+
+
+
+{% endblock %}
+
+

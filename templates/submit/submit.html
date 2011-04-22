@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %} Programs - Battleship {% endblock %}
+
+{% block content %}
+    <div id="item">
+    <h2> Submit a new program </h2>
+    <div> 
+        <form action="" method="post"> 
+        {% csrf_token %}
+        <p><label for="id_name">Name:</label> <input id="id_name" type="text" name="name" maxlength="50" /></p> 
+        <p><label for="id_description">Description:</label> <input id="id_description" type="text" name="description" maxlength="300" /></p> 
+        <p><label for="id_src">Src:</label> <textarea id="id_src" rows="10" cols="40" name="src"></textarea></p> 
+        <p><label for="id_helperfile">Helperfile:</label> <input type="checkbox" name="helperfile" id="id_helperfile" /></p> 
+        <p><label for="id_language">Language:</label> <select name="language" id="id_language"> 
+        <option value="" selected="selected">---------</option> 
+        <option value="python">python</option> 
+        <option value="c">c</option> 
+        <option value="c++">c++</option> 
+        <option value="octave">octave</option> 
+        <option value="perl">perl</option> 
+        <option value="java">java</option> 
+        </select></p> 
+        <input type="hidden" name="creator" id="id_creator" value="{{ user.id }}"/>
+        <input type="submit" value="Submit" /> 
+        </form> 
+    </div> 
+    </div><br /> 
+    
+{% endblock %}
+
+<!--  
+<form action="/submit/" method="post"> 
+        {% csrf_token %}
+        <p><label for="id_name">Name:</label> <input id="id_name" type="text" name="name" maxlength="50" /></p> 
+        <p><label for="id_description">Description:</label> <input id="id_description" type="text" name="description" maxlength="300" /></p> 
+        <p><label for="id_src">Src:</label> <textarea id="id_src" rows="10" cols="40" name="src"></textarea></p> 
+        <p><label for="id_helperfile">Helperfile:</label> <input type="checkbox" name="helperfile" id="id_helperfile" /></p> 
+        <p><label for="id_language">Language:</label> <select name="language" id="id_language"> 
+        <option value="" selected="selected">---------</option> 
+        <option value="python">python</option> 
+        <option value="c">c</option> 
+        <option value="c++">c++</option> 
+        <option value="octave">octave</option> 
+        <option value="perl">perl</option> 
+        <option value="java">java</option> 
+        </select></p> 
+        <input  name="creator" id="id_creator" value="{{ user.id }}"/>
+        <input type="submit" value="Submit" /> 
+        </form> 
+        --->

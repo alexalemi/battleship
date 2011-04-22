@@ -1,0 +1,33 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+<div id="item">
+    <h3> Battleship - the programming game </h3>
+    <p> Welcome to the programming game.  Details about the API for submission 
+    can be found at the <a href="about/">about</a> page above.  </p>
+</div><br />
+
+
+<div id="item">
+<h3> Leaderboard </h3>
+<center>
+<table style="border: 1px dashed black; padding: 10px;" cellpadding=10>
+<tr><td> rank <td> win <td> name <td> lang <td> creator
+    {% for prog in programs %}
+    <tr> <td> 1
+    <td> {{ prog.winpercentage }}
+    <td> <a href="programs/{{ prog.name }}">{{ prog.name }}</a>
+    <td> {{ prog.language }}
+    <td> <a href="users/{{ prog.creator }}"> {{ prog.creator }}</a>
+    {% endfor %}
+</table>
+</center>
+</div><br />
+
+</body>
+
+</html>

@@ -19,7 +19,9 @@ class ProgramPlayer:
         self.name = name
         print "Opening %s" % PATHTOPROGS + self.name
         #self.child = pexpect.spawn( '/bin/bash ' + PATHTOPROGS +self.name)
-        self.child = pexpect.spawn( PATHTOPROGS +self.name, logfile=sys.stderr)
+        self.child = pexpect.spawn( PATHTOPROGS +self.name)
+        if testing:
+            self.child.logfile = sys.stderr
         self.child.delaybeforesend= 0
 	self.child.expect('>')
         
@@ -66,7 +68,9 @@ class ProgramPlayer:
         
     def punish(self):
         """ Punish the program, if the flags get too high, raise the FailWhale """
-        
+        if self.child.closed:
+            print "Program failed and closed"
+            return 
         self.flag += 1
         
         self.send('E')
@@ -235,6 +239,7 @@ class ProgramPlayer:
                 #print "inserting at %d,%d" % (x + down*j , y + right*j )
                 if self.myboard[x+ down*j,y + right*j] != '':
                     print "Bad Board created, place taken"
+                    print self.myboard
                     self.punish()
                     self.genboard()
                     break
@@ -242,6 +247,7 @@ class ProgramPlayer:
                     self.myboard[x+down*j,y+right*j] = self.shipnames[i]
                 except IndexError:
                     print "Bad Board created, ran off board"
+                    print self.myboard
                     self.punish()
                     self.genboard()
                     break

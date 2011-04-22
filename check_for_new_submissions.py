@@ -1,42 +1,55 @@
+#xml reader import
 import xml.etree.ElementTree as etree
 
+#import my tournament models and hence database stuff
 from database.models import *
 setup_all()
 
+#import the commonpaths
 from commonpaths import *
 
+#other useful imports
 from datetime import datetime
-
 import os
-
-from validator import validate_script
-
-from playoff import playoff
-
 import itertools
 
+#tournament specific imports
+from validator import validate_script
+from playoff import playoff
+
+
+#get the list of directories in the Starting gate
 candidates =  os.listdir(STARTING_GATE_PATH)
 
-
+#get the list of programs currently in the database
 progs = Program.query.all()
+# and their names
 existing_progs = [q.name for q in progs ]
  
 
+#these are the people not in the database
 new_guys = [ c for c in candidates if c not in existing_progs ]
 
+#these are the people in the database
 same_guys = [ c for c in candidates if c not in new_guys ]
 same_guys_times = [ datetime.fromtimestamp(os.path.getatime(os.path.join(STARTING_GATE_PATH,c))) for c in same_guys ]
 
+#these are the people in the database who have a new timestamp,
+#   That is, they have been modified since they were saved
 diffs = [ same_guys_times[i] - Program.query.filter_by(name=c).one().timestamp for (i,c) in enumerate(same_guys)]
 changed_guys = [ c for (i,c) in enumerate(same_guys) if diffs[i].days >= 0 ]
 
+#the full list of things that need to be updated
 updatelist = new_guys + changed_guys
 
+#the list of people who are in the database and have not been changed
 oldopponents = [p for p in existing_progs if p not in changed_guys]
 
 
+#if there are any new folders
 if new_guys:
     for prog in new_guys:
+        #try to read the information needed from the xml file in the directory
         try:
             tree = etree.parse(os.path.join(STARTING_GATE_PATH,prog,'info.xml'))
             root = tree.getroot()
@@ -76,8 +89,11 @@ if new_guys:
         except IOError:
             print "XML File for <%s> doesn't seem to be right" % (prog)
 
+#if there are any guys that have changed
 if changed_guys:
     for prog in changed_guys:
+        #try to read their xml file
+        # NOTE this is copied code, maybe make an xml reader function to use twice instead
         try:
             tree = etree.parse(os.path.join(STARTING_GATE_PATH,prog,'info.xml'))
             root = tree.getroot()
@@ -118,11 +134,15 @@ if changed_guys:
             print "XML File for <%s> doesn't seem to be right" % (prog)
 
 
-NUM_GAMES = 10
+from multiprocessing import Pool
+gamepool = Pool(5)
+
+#try to find all of the new games to play, and play them.
+NUM_GAMES = 100
 if updatelist:
     if len(updatelist)>1:
         for (p,q) in itertools.combinations(updatelist,2):
-            playoff(p,q,N=NUM_GAMES)
+            gamepool.apply_async(playoff,(p,q,NUM_GAMES))
     for p in updatelist:
         for q in oldopponents:
-            playoff(p,q,N=NUM_GAMES)
+            gamepool.apply_async(playoff,(p,q,NUM_GAMES))

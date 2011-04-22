@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} Programs - Battleship {% endblock %}
+{% block path %}../{% endblock %}
+{% block content %}
+<div id="item" align="right">
+        {% if has_previous %}
+            <a href="users/?page={{ previous }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page }} of {{ pages }}.
+        </span>
+
+        {% if has_next %}
+            <a href="users/?page={{ next }}">next</a>
+        {% endif %}
+</div><br />
+{% for entry in object_list %}
+    <div id="item">
+        <h3> <a href="users/{{ entry.username }}">{{ entry.username }}</a>  </h3>
+        <p align='right'> Last login: {{ entry.last_login }}</p>
+    </div>
+    <br />
+{% endfor %}
+{% endblock %}

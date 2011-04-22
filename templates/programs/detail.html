@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+<link rel="stylesheet" type="text/css" href="media/pygments.css" media="screen" />
+{% endblock %}
+
+{% block title %} {{ program.name }} - Battleship {% endblock %}
+{% block content %}
+    <div id="item" id="showr">
+    <h2> <a href="programs/{{ program.name }}.html">{{ program.name }}</a> <span id="description"> {{ program.description }}  | {{program.language}} </span>  </h2>
+        <p>Ranking:&nbsp;{{ program.ranking }}&nbsp;| 
+        Guess&nbsp;effectiveness:&nbsp;{{ "%.4f"|format(program.hitsperguessaway) }} 
+        |&nbsp;Board&nbsp;effectiveness:&nbsp;{{ "%.4f"|format(program.hitsperguesshome) }} 
+        |&nbsp;Games&nbsp;played:&nbsp;{{ program.gamesplayed }}  
+        | &nbsp;Games&nbsp;won:&nbsp;{{ program.gameswon }} 
+        </p>
+        <p>
+        <b> Win percentage </b> {{ program.winpercentage }} 
+        </p>
+        </center>
+        <p align='right'> Created on: {{ program.creation_date }} by {{ program.author }} </p>
+        
+        {# {% ifequal program.creator user %}
+        </div><br />
+        <div id="item">
+        <h3> Source </h3>
+        {% load pygmentize4 %}
+        <div style="width: 300px" >
+        {% code program.language %}{{ program.src|safe }}{% endcode %}
+        </div>
+        {% endifequal %} #} 
+    </div><br />
+    
+{% endblock %}
+
+

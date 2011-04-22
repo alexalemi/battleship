@@ -1,4 +1,12 @@
 
+"""
+This file creates the database Models I use to save the database as a sqlite3 database using
+SQLAlchemy, driven by Elixir to make it django-like
+
+"""
+
+
+
 from elixir import *
 from datetime import datetime
 
@@ -7,6 +15,9 @@ metadata.bind = "sqlite:///data.db"
 
 
 class Program(Entity):
+    """ The Program model stores all of the data I need to specify a program,
+    including its name, author, description and the like, as well as its statistics 
+    """
     name = Field(String(30), unique=True)
     description = Field(String(300), default="")
     author = Field(String(30))
@@ -45,6 +56,7 @@ class Program(Entity):
         return "Name: <%s> | %s | V: %s" % (self.name, self.language, str(self.valid))
     
 class Game(Entity):
+    """ This is the Game Model which will store all of the information I need to specify a game """
     player1 = ManyToOne('Program')
     player2 = ManyToOne('Program')
     

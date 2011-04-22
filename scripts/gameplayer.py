@@ -13,14 +13,14 @@ from datetime import datetime
 class Game:
     """ This is the game class, it keeps track of a single game between two players """
 
-    def __init__(self,player1name,player2name):
+    def __init__(self,player1name,player2name,testing=False):
         """ Initialize with both players """
         self.player1name = player1name
         self.player2name = player2name
 
         
-        self.player1 = ProgramPlayer(self.player1name)
-        self.player2 = ProgramPlayer(self.player2name)
+        self.player1 = ProgramPlayer(self.player1name,testing)
+        self.player2 = ProgramPlayer(self.player2name,testing)
         
         self.playernames = [self.player1name,self.player2name]
         self.players = [self.player1, self.player2]
@@ -326,9 +326,9 @@ def launchgame(player1,player2):
     Q.playgame()
     Q.terminate()
   
-def launchgames(player1,player2, N=10):
+def launchgames(player1,player2, N=10,testing=False):
     
-    Q = Game(player1,player2)
+    Q = Game(player1,player2,testing)
     record, gamedicts = Q.playgames(N)
     
     #print "OUTPUT @@%s@@" % str(gamedicts)

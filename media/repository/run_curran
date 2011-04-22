@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export JAVA_HOME='/home/Grads/2008/cmuhlberger/opt/jdk1.6.0_24'
+export PATH="${JAVA_HOME}/bin:/home/Grads/2008/cmuhlberger/opt/x10-2.1.2/bin:${PATH}"
+
+x10 -classpath '/home/Grads/2008/cmuhlberger/battleship/test1' 'cdmuhlb.battleship.Driver'
+

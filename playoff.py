@@ -3,18 +3,25 @@ from scripts.gameplayer import launchgames
 from database.models import *
 setup_all()
 
+from stats import update_some_stats
 
-def playoff(name1,name2,N=10):
+
+def playoff(name1,name2,N=100):
+    """ This function will play a series of games between two players, it will then save the results of those games in the database """
+
+    #get the results of a bunch of games that have been played
     results, gameinfodict = launchgames(name1,name2,N)
     
     for gameinfo in gameinfodict:
         
+        #get the database IDs of the players involved, according to name
         print "Recieved a game <%s> vs <%s> won by <%s> " % ( gameinfo['player1name'], gameinfo['player2name'], gameinfo['winnername'] )
         player1 = Program.query.filter_by(name=gameinfo['player1name']).one()
         player2 = Program.query.filter_by(name=gameinfo['player2name']).one()
         winner = Program.query.filter_by(name=gameinfo['winnername']).one()
         loser = Program.query.filter_by(name=gameinfo['losername']).one()
 
+        #populate the gamedict, this will be passed to the Game Model class to create an entry.
         gamedict = {}
         gamedict['player1'] = player1
         gamedict['player2'] = player2
@@ -23,8 +30,13 @@ def playoff(name1,name2,N=10):
         for elem in ['finished','moves','duration','turns','remaininghealth','player1board','player2board','failwhale']:
             gamedict[elem] = gameinfo[elem]
 
+        #create the entry and save the database
         Game(**gamedict)
         session.commit()
+        
+    update_some_stats(name1)
+    update_some_stats(name2)
+    from make_website import *
 
         
 
