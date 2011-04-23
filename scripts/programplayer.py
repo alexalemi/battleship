@@ -23,7 +23,7 @@ class ProgramPlayer:
         if testing:
             self.child.logfile = sys.stderr
         self.child.delaybeforesend= 0
-	self.child.expect('>')
+        self.child.expect('>')
         
         self.flag = 0
         
@@ -83,7 +83,7 @@ class ProgramPlayer:
         #raise Exception("Error")
             
             
-    def poll(self,match='>',timeout=1):
+    def poll(self,match='>',timeout=5):
         """ Poll the program for a response, by default just look for the next 
         input.  By default just progress, and set the timeout of 1 """
         
@@ -102,7 +102,7 @@ class ProgramPlayer:
 
 
 
-    def polllist(self,matchlist,timeout=1):
+    def polllist(self,matchlist,timeout=5):
         """ Poll the program for a response, by default just look for the next 
         input.  By default just progress, and set the timeout of 1 """
         
@@ -120,7 +120,7 @@ class ProgramPlayer:
             
 
 
-    def defaultpoll(self,timeout=1):
+    def defaultpoll(self,timeout=5):
         """Default poll with the compiled thing, to try to save time"""
         try: 
             self.child.expect_list(self.defaultre,timeout=timeout)
