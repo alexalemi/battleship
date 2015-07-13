@@ -63,7 +63,7 @@ from collections import Counter
 import sys
 import random
 import subprocess
-import futures
+import concurrent.futures
 import time
 from random import randrange
 import logging
