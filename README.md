@@ -10,13 +10,14 @@ to.
 At that point, the engine will randomly determine who goes first,
 and send each engine a message on stdin,
 
-  0, opponent_name\n
+    0, opponent_name\n
 
 where the first character tells whether you go first or second,
 and the second string is your opponents name.
 
 Each binary must then report an ascii representation of a 10x10 game board
 with: 
+
     A for the aircraft carrier (length 5),
     B for a battle ship (length 4)
     S for a submarine (length 3)
@@ -49,7 +50,9 @@ boat characters above, and 'W\n' if you won the game.
 If it is not your turn, the engine will notify you of 
 your opponents guess in the form a comma separated tuple
 
-  0, 5\n
+    0, 5\n
 
-or, if you just lost, you will recieve a single 'L\n'
+or, if you just lost, you will recieve a single 'L\n':
+
+    L
 
