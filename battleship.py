@@ -55,37 +55,51 @@ your opponents guess in the form a comma separated tuple
 # sys.path.append("/home/alemi/anaconda/lib/python2.7/site-packages/")
 
 import os
+import socket
 from collections import Counter
 import sys
 import random
-import pexpect
+# import pexpect
+import subprocess
+from random import randrange
 import logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 ROOT = os.path.realpath(os.path.dirname(sys.argv[0]))
 
 class Process(object):
     """ A small wrapper to abstract the interaction with the process """
-    def __init__(self, path, *args,**kwargs):
+    def __init__(self, path, port=None, *args,**kwargs):
         self.shortname = os.path.basename(path)
         logging.debug("Initializing process for %s, path:%s", self.shortname, path)
-        self.p = pexpect.spawn(path,*args,**kwargs)
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.port = randrange(5000,6000)
+        server_address = ('localhost', self.port)
+        self.sock.bind(server_address)
+        logging.debug("Creating socket: %r", server_address)
+        self.p = subprocess.Popen([path, str(self.port)], stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, *args, **kwargs)
+
+        self.sock.listen(1)
+        logging.debug("Waiting for connection...")
+        self.connection, self.client_address = self.sock.accept()
+        self.connection_file = self.connection.makefile("r+")
 
     def sendline(self, s, *args, **kwargs):
+        """ Send a line by writing a line to the connection_file buffer """
         logging.debug("Sending %r to %s", s, self.shortname)
-        self.p.sendline(s, *args, **kwargs)
-        #consume what we just sent
-        self.p.readline()
+        self.connection_file.write(s + '\n')
+        self.connection_file.flush()
 
-    def readline(self, *args, **kwargs):
-        # logging.debug("Retrieving from %s", self.shortname)
-        line = self.p.readline(*args, **kwargs)
-        logging.debug("Retrieved %r from %s", line, self.shortname)
-        return line
+    def readline(self, bts=16,*args, **kwargs):
+        """ Read a line from the connection file_handler object """
+        msg = self.connection_file.readline()
+        logging.debug("Retrieved %r from %s", msg, self.shortname)
+        return msg
 
     def readguess(self, *args, **kwargs):
         """ Read a guess from the player, report as tuple """
-        line = self.p.readline(*args, **kwargs)
+        line = self.readline(*args, **kwargs)
         logging.debug("Got raw guess line %s", line)
         guess = tuple(map(int, line.strip().split(",")))
         logging.info("%s guessed %r", self.shortname, guess)
@@ -99,7 +113,7 @@ class Process(object):
         logging.debug("Attempting to read a board from %s", self.shortname)
         boardstrings = []
         for i in xrange(10):
-            boardstrings.append( self.readline().strip() )
+            boardstrings.append( self.readline(1).strip() )
         
         board = {}
         for j,line in enumerate(boardstrings):
@@ -129,7 +143,6 @@ class BattleshipPlayer(object):
         self.guesses = set()
         self.lives = {"A" : 5, "B": 4, "D": 3, "S": 3, "P": 2}
 
-        self.initialize_process()
 
     def initialize_process(self):
         # Hold the popen objects for the two players
@@ -180,9 +193,11 @@ class BattleshipGame(object):
             self._validate_boards()
         except BoardError as e:
             self.winner = 1-e.player
+            self.finished = True
             return 1
         except TimeoutError as e:
             self.winner = 1-e.player
+            self.finished = True
             return 1
         return 0
 
@@ -238,7 +253,10 @@ class BattleshipGame(object):
     def game(self):
         """ Run a game from start to finish """
         logging.info("Running a full game.")
+
+        
         self._gameinit()
+
 
         while not self.finished:
             self.turn()

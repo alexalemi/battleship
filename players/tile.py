@@ -2,14 +2,44 @@
 
 """ This strategy simply
 tries successive guesses, trying to tile
-the board, but ignore whether it hits or misses """
+the board, but ignore whether it hits or misses,
+
+this one uses sockets
+"""
 
 import logging
+import socket
+import os
+import sys
+
 from random import randrange
-logging.basicConfig(filename="logs/test.py", level=logging.DEBUG)
+
+# set up simple logging to a file
+logging.basicConfig(filename="logs/{}.log".format(os.path.basename(__file__)), level=logging.DEBUG)
+
+# Read in the port we should connect on
+port = int(sys.argv[1])
+logging.debug("Got port %d", port)
+
+# Create the socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_address = ('localhost', port)
+logging.debug("Connection to %r", server_address)
+sock.connect(server_address)
+sock_file = sock.makefile("r+")
+logging.debug("Connected")
+
+def readline():
+    msg = sock_file.readline()
+    return msg
+
+def sendline(msg):
+    sock_file.write(msg + '\n')
+    sock_file.flush()
 
 # first we recieve an init string
-initstring = raw_input()
+logging.debug("Recieve the init string...")
+initstring = readline()
 turn, opponent = initstring.split(",")
 
 if turn=="0":
@@ -31,7 +61,7 @@ board = ["0000000000",
         "0000000000"]
 
 for line in board:
-    print line
+    sendline(line)
 
 # Now have the main loop, alternating whether its our
 # turn or not
@@ -44,17 +74,17 @@ while True:
         guessx = guessno % 10
         guessy = guessno // 10
         logging.debug("My guess: (%d, %d)", guessx, guessy)
-        print "{},{}".format(guessx, guessy)
+        sendline("{},{}".format(guessx, guessy))
     
         # and now recieve what happened
-        data = raw_input()
+        data = readline()
         logging.debug("Got %r", data)
 
         myturn = False
     else:
         # if it isn't our turn, we just read our opponents
         # guess
-        data = raw_input()
+        data = readline()
         logging.debug("got opponent guess: %r", data)
         myturn = True
 
