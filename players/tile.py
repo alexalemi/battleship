@@ -14,6 +14,8 @@ import sys
 
 from random import randrange
 
+BUFFER = 2048
+
 # set up simple logging to a file
 logging.basicConfig(filename="logs/{}.log".format(os.path.basename(__file__)), level=logging.DEBUG)
 
@@ -26,7 +28,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', port)
 logging.debug("Connection to %r", server_address)
 sock.connect(server_address)
-sock_file = sock.makefile("r+")
+sock_file = sock.makefile("+", bufsize=BUFFER)
 logging.debug("Connected")
 
 def readline():

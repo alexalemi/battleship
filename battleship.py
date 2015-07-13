@@ -71,6 +71,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 ROOT = os.path.realpath(os.path.dirname(__file__))
 WORKERS = 10
+BUFFER = 2056
 
 class Process(object):
     """ A small wrapper to abstract the interaction with the process """
@@ -99,7 +100,7 @@ class Process(object):
         self.sock.listen(1)
         logging.debug("Waiting for connection...")
         self.connection, self.client_address = self.sock.accept()
-        self.connection_file = self.connection.makefile("r+")
+        self.connection_file = self.connection.makefile("r+", bufsize=BUFFER)
 
     def __del__(self):
         # clean up the process and port
