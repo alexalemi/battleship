@@ -1,10 +1,16 @@
 #!/usr/bin/env python2
 
-""" This strategy simply
-tries successive guesses, trying to tile
-the board, but ignore whether it hits or misses,
+""" This strategy aims to serve as a simple baseline
+We have two modes, hunting and targeting.
+If we are hunting, just make a random guess that we have 
+never made before.
 
-this one uses sockets
+Anytime we hit, add the north, west, east and south
+squares adjacent to a hit to our list of targets, and
+enter targetting mode
+
+if in targetting mode, just pop a random target
+off the queue and guess it
 """
 
 import logging
