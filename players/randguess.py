@@ -6,40 +6,19 @@ any responses
 """
 
 import logging
-import socket
-import os
-import sys
-
 from random import randrange
-
-BUFFER = 2048
+import util
+import os
+import socket
 
 # set up simple logging to a file
 logging.basicConfig(filename="logs/{}.log".format(os.path.basename(__file__)), level=logging.DEBUG)
 
-# Read in the port we should connect on
-port = int(sys.argv[1])
-logging.debug("Got port %d", port)
-
-# Create the socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('localhost', port)
-logging.debug("Connection to %r", server_address)
-sock.connect(server_address)
-sock_file = sock.makefile("+", bufsize=BUFFER)
-logging.debug("Connected")
-
-def readline():
-    msg = sock_file.readline()
-    return msg
-
-def sendline(msg):
-    sock_file.write(msg + '\n')
-    sock_file.flush()
+comm = util.Communication()
 
 # first we recieve an init string
 logging.debug("Recieve the init string...")
-initstring = readline()
+initstring = comm.readline()
 turn, opponent = initstring.split(",")
 
 if turn=="0":
@@ -48,20 +27,10 @@ else:
     myturn = False
 logging.debug("initstring: %s", initstring)
 
-#now we need to send a board
-board = ["0000000000", 
-        "00000000PP",
-        "00B0000000",
-        "00B000A000",
-        "00B000ASSS",
-        "00BDDDA000",
-        "000000A000",
-        "000000A000",
-        "0000000000",
-        "0000000000"]
 
-for line in board:
-    sendline(line)
+board = util.gen_random_board_str()
+for line in board.splitlines():
+    comm.sendline(line)
 
 # Now have the main loop, alternating whether its our
 # turn or not
@@ -74,17 +43,17 @@ while True:
             guessx = randrange(10)
             guessy = randrange(10)
             logging.debug("My guess: (%d, %d)", guessx, guessy)
-            sendline("{},{}".format(guessx, guessy))
+            comm.sendline("{},{}".format(guessx, guessy))
         
             # and now recieve what happened
-            data = readline()
+            data = comm.readline()
             logging.debug("Got %r", data)
 
             myturn = False
         else:
             # if it isn't our turn, we just read our opponents
             # guess
-            data = readline()
+            data = comm.readline()
             logging.debug("got opponent guess: %r", data)
             myturn = True
     except socket.error:
