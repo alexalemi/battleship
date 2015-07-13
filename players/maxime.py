@@ -32,7 +32,12 @@ class Game:
                 else:
                     self.player.result(guess, data)
             else:
-                self.player.opponent_guess(self.read_line())
+                data = self.read_line()
+                if data == 'L':
+                    self.player.lost()
+                    return
+                else:
+                    self.player.opponent_guess(data)
 
             myturn = not myturn
 
@@ -196,6 +201,9 @@ class Player:
 
     def win(self):
         logging.info('Win \o/')
+
+    def lost(self):
+        logging.info(':(')
 
     def _print_board(self):
         logging.debug('opponent board:')
