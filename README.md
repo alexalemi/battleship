@@ -8,11 +8,11 @@ command line argument, which is the port on which you should connect
 to.
 
 At that point, the engine will randomly determine who goes first,
-and send each engine a message on stdin,
+and send each program a message on stdin,
 
     0, opponent_name\n
 
-where the first character tells whether you go first or second,
+where the first character tells whether you go first (0) or second (1),
 and the second string is your opponents name.
 
 Each binary must then report an ascii representation of a 10x10 game board
@@ -43,16 +43,14 @@ as a comma separated tuple, 0-indexed, e.g.
 
     0, 5\n
 
-The engine will report back on stdin, either 'H\n' if a hit,
-'M\n' if a miss, 'SX\n' if you sunk a ship, where X is one of the 
-boat characters above, and 'W\n' if you won the game.
+The engine will report back on the socket, either `H\n` if a hit,
+`M\n` if a miss, `SX\n` if you sunk a ship, where X is one of the 
+boat characters above, and `W\n` if you won the game.
 
 If it is not your turn, the engine will notify you of 
 your opponents guess in the form a comma separated tuple
 
     0, 5\n
 
-or, if you just lost, you will recieve a single 'L\n':
-
-    L
+or, if you just lost, you will recieve a single `L\n`:
 
