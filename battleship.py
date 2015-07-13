@@ -363,7 +363,7 @@ def ratings(players=None, N=10):
         ratings[p] = trueskill.Rating()
 
     logging.info("Calculating ratings...")
-    # random.shuffle(allgames)
+    random.shuffle(allgames)
     for winner,loser in allgames:
         ratings[winner], ratings[loser] = trueskill.rate_1vs1(ratings[winner], ratings[loser])
 
