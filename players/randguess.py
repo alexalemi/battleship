@@ -66,23 +66,27 @@ for line in board:
 
 guessno = 0
 while True:
-    if myturn:
-        # we need to send a guess
-        guessx = randrange(10)
-        guessy = randrange(10)
-        logging.debug("My guess: (%d, %d)", guessx, guessy)
-        sendline("{},{}".format(guessx, guessy))
-    
-        # and now recieve what happened
-        data = readline()
-        logging.debug("Got %r", data)
+    try:
+        if myturn:
+            # we need to send a guess
+            guessx = randrange(10)
+            guessy = randrange(10)
+            logging.debug("My guess: (%d, %d)", guessx, guessy)
+            sendline("{},{}".format(guessx, guessy))
+        
+            # and now recieve what happened
+            data = readline()
+            logging.debug("Got %r", data)
 
-        myturn = False
-    else:
-        # if it isn't our turn, we just read our opponents
-        # guess
-        data = readline()
-        logging.debug("got opponent guess: %r", data)
-        myturn = True
+            myturn = False
+        else:
+            # if it isn't our turn, we just read our opponents
+            # guess
+            data = readline()
+            logging.debug("got opponent guess: %r", data)
+            myturn = True
+    except socket.error:
+        # the socket closed, we presumably either won or lost
+        logging.debug("Socket Closed!")
 
 

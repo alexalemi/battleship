@@ -4,10 +4,15 @@ Run a game of battleship between two processes.
 to run, give the names of the two binaries to execute.
  e.g. python game.py /path/to/engine1 /path/to/engine2
 
+The engine expects the processes to communicate over a socket.
+When the engine runs your process, it will send a single 
+command line argument, which is the port on which you should connect
+to.
+
 At that point, the engine will randomly determine who goes first,
 and send each engine a message on stdin,
 
-  0, opponent_name
+  0, opponent_name\n
 
 where the first character tells whether you go first or second,
 and the second string is your opponents name.
@@ -23,49 +28,48 @@ with:
 
 for example, an example board would be:
 
-    0000000000
-    00000000PP
-    00B0000000
-    00B000A000
-    00B000ASSS
-    00BDDDA000
-    000000A000
-    000000A000
-    0000000000
-    0000000000
+    0000000000\n
+    00000000PP\n
+    00B0000000\n
+    00B000A000\n
+    00B000ASSS\n
+    00BDDDA000\n
+    000000A000\n
+    000000A000\n
+    0000000000\n
+    0000000000\n
 
 At that point, if it is your turn, you must report your guess
 as a comma separated tuple, 0-indexed, e.g.
 
-    0, 5
+    0, 5\n
 
-The engine will report back on stdin, either H if a hit,
-M if a miss, SX if you sunk a ship, where X is one of the 
-boat characters above, and W if you won the game.
+The engine will report back on stdin, either 'H\n' if a hit,
+'M\n' if a miss, 'SX\n' if you sunk a ship, where X is one of the 
+boat characters above, and 'W\n' if you won the game.
 
 If it is not your turn, the engine will notify you of 
 your opponents guess in the form a comma separated tuple
 
-  0, 5
+  0, 5\n
 
 """
 
-# FIX FOR PYPY
-# import sys
-# sys.path.append("/home/alemi/anaconda/lib/python2.7/site-packages/")
 
 import os
 import socket
 from collections import Counter
 import sys
 import random
-# import pexpect
 import subprocess
+import futures
+import time
 from random import randrange
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-ROOT = os.path.realpath(os.path.dirname(sys.argv[0]))
+ROOT = os.path.realpath(os.path.dirname(__file__))
+WORKERS = 10
 
 class Process(object):
     """ A small wrapper to abstract the interaction with the process """
@@ -73,17 +77,36 @@ class Process(object):
         self.shortname = os.path.basename(path)
         logging.debug("Initializing process for %s, path:%s", self.shortname, path)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.port = randrange(5000,6000)
-        server_address = ('localhost', self.port)
-        self.sock.bind(server_address)
+        
+        done = False
+        while not done:
+            try:
+                self.port = randrange(5000,10000)
+                server_address = ('localhost', self.port)
+                self.sock.bind(server_address)
+                break
+            except socket.error:
+                logging.warning("We hit a bad port (%d) bind, try again", self.port)
+                # we presumabely failed to bind, try again, but sleep a bit
+                time.sleep(0.01)
+                continue
+
         logging.debug("Creating socket: %r", server_address)
-        self.p = subprocess.Popen([path, str(self.port)], stdin=subprocess.PIPE,
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, *args, **kwargs)
+        self.p = subprocess.Popen([path, str(self.port)], *args, **kwargs) #, stdin=subprocess.PIPE,
+                    #stdout=subprocess.PIPE, stderr=subprocess.PIPE, *args, **kwargs)
 
         self.sock.listen(1)
         logging.debug("Waiting for connection...")
         self.connection, self.client_address = self.sock.accept()
         self.connection_file = self.connection.makefile("r+")
+
+    def __del__(self):
+        # clean up the process and port
+        self.p.terminate()
+        self.connection_file.close()
+        self.connection.close()
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.close()
 
     def sendline(self, s, *args, **kwargs):
         """ Send a line by writing a line to the connection_file buffer """
@@ -143,10 +166,14 @@ class BattleshipPlayer(object):
         self.guesses = set()
         self.lives = {"A" : 5, "B": 4, "D": 3, "S": 3, "P": 2}
 
+    def __del__(self):
+        del self.p
 
     def initialize_process(self):
         # Hold the popen objects for the two players
-        self.p = Process(os.path.join(ROOT, self.name))
+        prog = os.path.join(ROOT, self.name)
+        logging.debug("Launching process %s", prog)
+        self.p = Process(prog)
         self.p.delaybeforesend = 0
         #Try to tell each of them their opponents name
         self.p.sendline("{}, {}".format(self.playernum, self.opponent))
@@ -182,6 +209,10 @@ class BattleshipGame(object):
 
         self.finished = False
         self.winner = 0.5
+
+    def __del__(self):
+        del self.p0
+        del self.p1
 
     def _gameinit(self):
         """ Initialize a game and catch errors """
@@ -278,10 +309,24 @@ class BattleshipGame(object):
         if count1 != validcount:
             logging.error("ERROR on player 1 board")
             raise BoardError(1)
+
+def game(opp0, opp1):
+    engine = BattleshipGame(opp0, opp1)
+    return engine.game()
+
+def unpackgame(opps):
+    return game(*opps)
+
+def match(opp0, opp1, N=1000):
+    """ Run a match between opp1 and opp2, which consists of N games """
+    with futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
+        return [res for res in executor.map(unpackgame, ((opp0,opp1) for i in xrange(N)))]
+
+opp1 = "players/randguess.py"
+opp2 = "players/tile.py"
         
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         print __doc__
     else:
-        game = BattleshipGame(sys.argv[1],sys.argv[2])
-        print game.game()
+        print game(sys.argv[1], sys.argv[2])
