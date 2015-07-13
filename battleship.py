@@ -313,20 +313,19 @@ class BattleshipGame(object):
             raise BoardError(1)
 
 def game(opp0, opp1):
+    """ Run a single game between two opponents,
+        returns either 0 or 1 based on the winner """
     engine = BattleshipGame(opp0, opp1)
     return engine.game()
 
 def unpackgame(opps):
     return game(*opps)
 
-def match(opp0, opp1, N=1000):
-    """ Run a match between opp1 and opp2, which consists of N games """
+def match(opp0, opp1, N=100):
+    """ Run a match between opp0 and opp1, which consists of N games """
     with futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
         return [res for res in executor.map(unpackgame, ((opp0,opp1) for i in xrange(N)))]
 
-opp1 = "players/randguess.py"
-opp2 = "players/tile.py"
-        
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         print __doc__
