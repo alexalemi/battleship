@@ -53,9 +53,16 @@ while True:
 
             if huntmode:
                 guess = random.choice(list(allpos.difference(guesses)))
+                logging.debug("Made huntmode guess %r", guess)
             else:
                 # we are in targetting mode
-                p, guess = heapq.heappop(targets)
+                if targets:
+                    p, guess = heapq.heappop(targets)
+                    logging.debug("Made target mode guess %r", guess)
+                else:
+                    logging.warning("Seem to have emtpy targets list, fall back to random")
+                    guess = random.choice(list(allpos.difference(guesses)))
+                    logging.debug("Made (forced) huntmode guess %r", guess)
                 if not targets:
                     huntmode = True
 
@@ -67,6 +74,7 @@ while True:
             data = comm.readline()
             logging.debug("Got %r", data)
             if data.startswith('H') or data.startswith('S'):
+                logging.debug("Got hit or sink, adding targets")
                 guessx, guessy = guess
                 if guessx > 0:
                     target = (guessx-1, guessy)
@@ -84,6 +92,7 @@ while True:
                     target = (guessx, guessy+1)
                     if target not in guesses:
                         heapq.heappush(targets, (random.random(), target))
+                huntmode = False
 
 
             myturn = False
@@ -93,6 +102,7 @@ while True:
             data = comm.readline()
             logging.debug("got opponent guess: %r", data)
             myturn = True
+
     except socket.error:
         # the socket closed, we presumably either won or lost
         logging.debug("Socket Closed!")

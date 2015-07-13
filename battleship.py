@@ -64,6 +64,7 @@ import sys
 import random
 import subprocess
 import concurrent.futures
+import itertools
 import time
 from random import randrange
 import logging
@@ -327,8 +328,6 @@ def match(opp0, opp1, N=100):
     with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
         return [res for res in executor.map(unpackgame, ((opp0,opp1) for i in xrange(N)))]
 
-import trueskill
-import itertools
 
 def tourney(players=None, N=10):
     """ Run a tournament over all of the players """
@@ -339,9 +338,6 @@ def tourney(players=None, N=10):
 
     combos = itertools.combinations(players, 2)
 
-    ratings = {}
-    for p in players:
-        ratings[p] = trueskill.Rating()
 
     allgames = []
     for combo in combos:
@@ -353,6 +349,18 @@ def tourney(players=None, N=10):
             else:
                 winner,loser = combo
             allgames.append((winner,loser))
+
+    return allgames, players
+
+def ratings(players=None, N=10):
+    """ Run a tournment for all of the players, N times and return the ratings """
+    import trueskill
+
+    allgames, players = tourney(players, N)
+
+    ratings = {}
+    for p in players:
+        ratings[p] = trueskill.Rating()
 
     logging.info("Calculating ratings...")
     # random.shuffle(allgames)
