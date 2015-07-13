@@ -375,9 +375,7 @@ def ratings(players=None, N=10):
     for winner,loser in allgames:
         ratings[winner], ratings[loser] = trueskill.rate_1vs1(ratings[winner], ratings[loser])
 
-    return ratings
-
-
+    return ratings, allgames, players
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
