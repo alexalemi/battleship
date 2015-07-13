@@ -245,8 +245,7 @@ class BattleshipGame(object):
 
         # need to read a guess from the guesser
         guess = self.guesser.p.readguess()
-        # send the guess to the marker
-        self.marker.p.sendguess(guess)
+
 
         # check to see if this is a hit
         ship = self.marker.board.get(guess, '')
@@ -283,6 +282,13 @@ class BattleshipGame(object):
             # we had a miss, send a miss
             logging.info("Miss")
             self.guesser.p.sendline("M")
+
+        # send the guess to the marker
+        if self.finished:
+            self.marker.p.sendline("L")
+        else:
+            self.marker.p.sendguess(guess)
+
        
         # swap players
         self.guesser, self.marker = self.marker, self.guesser
