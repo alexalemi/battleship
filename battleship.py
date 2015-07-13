@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
 """
+Author: Alex Alemi
+
 Run a game of battleship between two processes.
 
 to run, give the names of the two binaries to execute.

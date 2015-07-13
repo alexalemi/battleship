@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 
-""" This strategy simply makes
+"""
+Author: Alex Alemi
+This strategy simply makes
 completely random guesses, ignoring
 any responses
 """

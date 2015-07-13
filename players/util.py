@@ -1,4 +1,5 @@
 """
+Author: Alex Alemi
 Some utility routines for python players
 """
 import logging

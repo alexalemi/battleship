@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
+""" 
+Author: Alex Alemi
 
-""" This strategy aims to serve as a simple baseline
+This strategy aims to serve as a simple baseline
 We have two modes, hunting and targeting.
 If we are hunting, just make a random guess that we have 
 never made before.
