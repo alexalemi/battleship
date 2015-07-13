@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 """ This strategy simply makes
 completely random guesses, ignoring
@@ -11,6 +11,7 @@ import os
 import sys
 
 from random import randrange
+BUFFER = 2048
 
 # set up simple logging to a file
 logging.basicConfig(filename="logs/{}.log".format(os.path.basename(__file__)), level=logging.DEBUG)
@@ -24,16 +25,17 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', port)
 logging.debug("Connection to %r", server_address)
 sock.connect(server_address)
-sock_file = sock.makefile("r+")
+sock_r = sock.makefile("r", buffering=BUFFER)
+sock_r = sock.makefile("w", buffering=BUFFER)
 logging.debug("Connected")
 
 def readline():
-    msg = sock_file.readline()
+    msg = sock_r.readline()
     return msg
 
 def sendline(msg):
-    sock_file.write(msg + '\n')
-    sock_file.flush()
+    sock_w.write(msg + '\n')
+    sock_w.flush()
 
 # first we recieve an init string
 logging.debug("Recieve the init string...")
