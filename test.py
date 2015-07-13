@@ -47,7 +47,7 @@ while True:
         myturn = False
     else:
         # if it isn't our turn, we just read our opponents
-        # guess
+       # guess
         data = raw_input()
         logging.debug("got opponent guess: %r", data)
         myturn = True
