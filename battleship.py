@@ -72,6 +72,7 @@ logging.basicConfig(level=logging.DEBUG)
 ROOT = os.path.realpath(os.path.dirname(__file__))
 WORKERS = 10
 BUFFER = 2056
+PLAYERPATH = 'players'
 
 class Process(object):
     """ A small wrapper to abstract the interaction with the process """
@@ -323,8 +324,44 @@ def unpackgame(opps):
 
 def match(opp0, opp1, N=100):
     """ Run a match between opp0 and opp1, which consists of N games """
-    with futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
         return [res for res in executor.map(unpackgame, ((opp0,opp1) for i in xrange(N)))]
+
+import trueskill
+import itertools
+
+def tourney(players=None, N=10):
+    """ Run a tournament over all of the players """
+    players = players or [ os.path.join(PLAYERPATH,p) for p in os.listdir(PLAYERPATH) 
+            if os.access(os.path.join(PLAYERPATH,p), os.X_OK)]
+
+    logging.info("Running tournament for %r", players)
+
+    combos = itertools.combinations(players, 2)
+
+    ratings = {}
+    for p in players:
+        ratings[p] = trueskill.Rating()
+
+    allgames = []
+    for combo in combos:
+        logging.info("running match for %r", combo)
+        ans = match(combo[0], combo[1], N)
+        for a in ans:
+            if a:
+                loser,winner = combo
+            else:
+                winner,loser = combo
+            allgames.append((winner,loser))
+
+    logging.info("Calculating ratings...")
+    # random.shuffle(allgames)
+    for winner,loser in allgames:
+        ratings[winner], ratings[loser] = trueskill.rate_1vs1(ratings[winner], ratings[loser])
+
+    return ratings
+
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
