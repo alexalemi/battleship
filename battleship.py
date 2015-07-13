@@ -74,6 +74,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 ROOT = os.path.realpath(os.path.dirname(__file__))
 WORKERS = 10
+DEFAULTN = 10
 BUFFER = 2056
 PLAYERPATH = 'players'
 
@@ -331,13 +332,13 @@ def game(opp0, opp1):
 def unpackgame(opps):
     return game(*opps)
 
-def match(opp0, opp1, N=100):
+def match(opp0, opp1, N=DEFAULTN):
     """ Run a match between opp0 and opp1, which consists of N games """
     with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
         return [res for res in executor.map(unpackgame, ((opp0,opp1) for i in xrange(N)))]
 
 
-def tourney(players=None, N=10):
+def tourney(players=None, N=DEFAULTN):
     """ Run a tournament over all of the players """
     players = players or [ os.path.join(PLAYERPATH,p) for p in os.listdir(PLAYERPATH) 
             if os.access(os.path.join(PLAYERPATH,p), os.X_OK)]
@@ -360,7 +361,7 @@ def tourney(players=None, N=10):
 
     return allgames, players
 
-def ratings(players=None, N=10):
+def get_ratings(players=None, N=DEFAULTN):
     """ Run a tournment for all of the players, N times and return the ratings """
     import trueskill
 
@@ -376,6 +377,35 @@ def ratings(players=None, N=10):
         ratings[winner], ratings[loser] = trueskill.rate_1vs1(ratings[winner], ratings[loser])
 
     return ratings, allgames, players
+
+
+def make_leaderboard(ratings, allgames, players):
+    wins = lambda p: sum(1 for g in allgames if g[0]==p)
+    loses = lambda p: sum(1 for g in allgames if g[1]==p)
+
+    boardentries = []
+    for p in players:
+        boardentries.append([os.path.basename(p), ratings[p].exposure, ratings[p].mu, ratings[p].sigma, wins(p), loses(p)])
+    
+    boardentries = sorted(boardentries, key=lambda x: x[1], reverse=True)
+    boardentries = [ [i+1] + x for i,x in enumerate(boardentries) ]
+    import tabulate
+    table = tabulate.tabulate(boardentries, 
+            headers=["rank", "name", "exposure", "mean", "sigma", "wins", "loses"])
+    return boardentries, table
+
+def leaderboard(players=None, N=10, filename="leaderboard.txt"):
+    """ Create a leaderboard, and optionally save it to a file """
+    logging.info("Generating a leaderboard for players: %r, N=%d", players, N)
+    ratings, allgames, players = get_ratings(players, N)
+    board, table = make_leaderboard(ratings, allgames, players)
+    print table
+    if filename:
+        logging.info("Saving leaderboard to file: %s", filename)
+        with open(filename,"w") as f:
+            f.write(table)
+            f.write('\n')
+    return board, table
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
