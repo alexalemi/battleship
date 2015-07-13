@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 """
 Run a game of battleship between two processes.
 

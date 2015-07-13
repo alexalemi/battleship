@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 """ This strategy simply makes
 completely random guesses, ignoring
