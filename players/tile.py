@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+""" This strategy simply
+tries successive guesses, trying to tile
+the board, but ignore whether it hits or misses """
+
 import logging
 from random import randrange
 logging.basicConfig(filename="logs/test.py", level=logging.DEBUG)

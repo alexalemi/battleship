@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+""" A simple example strategy, that always
+uses the same board and takes random guesses as to the location,
+without taking into account any information
+about the responses """
+
 import logging
 from random import randrange
 logging.basicConfig(filename="logs/test.py", level=logging.DEBUG)
