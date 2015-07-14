@@ -80,6 +80,8 @@ BUFFER = 2056
 PLAYERPATH = 'players'
 TIMEOUT = 2
 
+SHIP_LENGTHS = {"A":5, "B":4, "D":3, "S":3, "P":2}
+
 class TimeoutError(Exception):
     def __init__(self, signum=None, frame=None):
         self.signum = signum
@@ -361,19 +363,42 @@ class BattleshipGame(object):
             self.p0.p.p.terminate()
             self.p1.p.p.terminate()
 
+    def _validate_board(self, board):
+        """ Validate a single board """
+        # First make sure the ship counts are correct
+        validcount = Counter(SHIP_LENGTHS)
+        count = Counter(board.values())
+        if count != validcount:
+            logging.warning("Board has an invalid ship count")
+            return False
+        # now check to make sure each ship is co-linear, and has the right range
+        for ship,length in SHIP_LENGTHS.iteritems():
+            pairs = [ k for k,v in board.iteritems() if v==ship ]
+            xs = [ k[0] for k in pairs ]
+            ys = [ k[1] for k in pairs ]
+
+            #colinearity
+            if not ( (len(set(xs)) == 1) or (len(set(ys)) == 1) ):
+                logging.warning("Board has a non-colinear ship %s", ship)
+                return False
+            # check to make sure the span of each ship is correct
+            if not ( (max(xs)-min(xs) == length-1) or (max(ys)-min(ys) == length-1) ):
+                logging.warning("Board has a bad span for ship %s", ship)
+                return False
+
+        return True
+
+
     def _validate_boards(self):
         """ Check to see if the board is valid
         raise an error if there is a problem with the board"""
-        validcount = Counter("AAAAABBBBSSSDDDPP")
-
-        count0 = Counter(self.p0.board.values())
-        if count0 != validcount:
-            logging.error("ERROR on player 0 board")
+        # First try to check to make sure each ship 
+        # appears the correct number of times
+        if not self._validate_board(self.p0.board):
+            logging.warning("Error on player 0 board")
             raise BoardError(0)
-
-        count1 = Counter(self.p1.board.values())
-        if count1 != validcount:
-            logging.error("ERROR on player 1 board")
+        if not self._validate_board(self.p1.board):
+            logging.warning("Error on player 1 board")
             raise BoardError(1)
 
 def game(opp0, opp1):
