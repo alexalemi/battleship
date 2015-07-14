@@ -1,6 +1,7 @@
 # Battleship Tournament
 
-A dirt simple battleship tournament engine [wiki](https://en.wikipedia.org/wiki/Battleship_\(game\))
+A dirt simple [battleship](https://en.wikipedia.org/wiki/Battleship_\(game\))
+tournament engine.
 
 The engine expects the processes to communicate over a socket.
 When the engine runs your process, it will send a single 
