@@ -410,6 +410,13 @@ def game(opp0, opp1):
 def unpackgame(opps):
     return game(*opps)
 
+def unpackres(opps):
+    out = game(*opps)
+    if out == 0:
+        return (opps[0], opps[1])
+    else:
+        return (opps[1], opps[0])
+
 def match(opp0, opp1, N=DEFAULTN):
     """ Run a match between opp0 and opp1, which consists of N games """
     with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
@@ -428,16 +435,13 @@ def tourney(players=None, N=DEFAULTN):
 
     combos = itertools.combinations(players, 2)
 
-    allgames = []
-    for combo in combos:
-        logging.info("running match for %r", combo)
-        ans = match(combo[0], combo[1], N)
-        for a in ans:
-            if a:
-                loser,winner = combo
-            else:
-                winner,loser = combo
-            allgames.append((winner,loser))
+    # allgames = []
+    with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
+        matchups = []
+        for combo in combos:
+            for i in xrange(N):
+                matchups.append((combo[0],combo[1]))
+        allgames = [res for res in executor.map(unpackres, matchups)]
 
     return allgames, players
 
