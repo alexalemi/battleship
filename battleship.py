@@ -69,6 +69,7 @@ import concurrent.futures
 import itertools
 import time
 from random import randrange
+from functools import wraps
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
@@ -77,6 +78,13 @@ WORKERS = 10
 DEFAULTN = 10
 BUFFER = 2056
 PLAYERPATH = 'players'
+
+def timeout_wrapper(func):
+    """ A simple timeout decorator """
+    @wraps(func)
+    def timedout(*args, **kwargs):
+        """ The timedout version of the function """
+    return timedout
 
 class Process(object):
     """ A small wrapper to abstract the interaction with the process """
