@@ -58,7 +58,6 @@ your opponents guess in the form a comma separated tuple
 
 """
 
-
 import os
 import socket
 from collections import Counter
@@ -69,7 +68,8 @@ import concurrent.futures
 import itertools
 import time
 from random import randrange
-from functools import wraps
+import functools
+import signal
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
@@ -78,13 +78,28 @@ WORKERS = 10
 DEFAULTN = 10
 BUFFER = 2056
 PLAYERPATH = 'players'
+TIMEOUT = 2
 
-def timeout_wrapper(func):
-    """ A simple timeout decorator """
-    @wraps(func)
-    def timedout(*args, **kwargs):
-        """ The timedout version of the function """
-    return timedout
+class TimeoutError(Exception):
+    def __init__(self, signum=None, frame=None):
+        self.signum = signum
+        self.frame = frame
+
+def signal_handler(signum=None, frame=None):
+    raise TimeoutError(signum, frame)
+
+def timelimit(func):
+    """ A timelimit decorator """
+    @functools.wraps(func)
+    def timed_func(*args, **kwargs):
+        signal.signal(signal.SIGALRM, signal_handler)
+        signal.alarm(TIMEOUT)
+        try:
+            return func(*args, **kwargs)
+        finally:
+            signal.alarm(0)
+    return timed_func
+
 
 class Process(object):
     """ A small wrapper to abstract the interaction with the process """
@@ -123,12 +138,14 @@ class Process(object):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.close()
 
+    @timelimit
     def sendline(self, s, *args, **kwargs):
         """ Send a line by writing a line to the connection_file buffer """
         logging.debug("Sending %r to %s", s, self.shortname)
         self.connection_file.write(s + '\n')
         self.connection_file.flush()
-
+    
+    @timelimit
     def readline(self, bts=16,*args, **kwargs):
         """ Read a line from the connection file_handler object """
         msg = self.connection_file.readline()
@@ -161,10 +178,6 @@ class Process(object):
         return board
 
 class BoardError(Exception):
-    def __init__(self, player):
-        self.player = player
-
-class TimeoutError(Exception):
     def __init__(self, player):
         self.player = player
 
@@ -204,6 +217,8 @@ class BattleshipPlayer(object):
         return False
 
 
+
+
 class BattleshipGame(object):
     """ A single instance of a battleship game """
 
@@ -216,6 +231,10 @@ class BattleshipGame(object):
             self.switch = True
         self.p0 = BattleshipPlayer(opp0, opp1, 0)
         self.p1 = BattleshipPlayer(opp1, opp0, 1)
+        
+        self.player_lookup = { self.p0: 0, self.p1: 1}
+        
+        self.current_player = 0
 
         self.turns = 0
 
@@ -232,89 +251,113 @@ class BattleshipGame(object):
     def _gameinit(self):
         """ Initialize a game and catch errors """
         try:
+            player = 0
             self.p0.initialize_process()
+            player = 1
             self.p1.initialize_process()
+            player = 0
             self.p0.read_board()
+            player = 1
             self.p1.read_board()
             self._validate_boards()
         except BoardError as e:
+            logging.exception("Got a board error for player %d", player)
             self.winner = 1-e.player
             self.finished = True
             return 1
         except TimeoutError as e:
-            self.winner = 1-e.player
+            logging.exception("Got a timeout error for player %d", player)
+            self.winner = 1-player
             self.finished = True
             return 1
         return 0
 
     def turn(self):
-        # main game loop
-        self.turns += 1
-        logging.debug("Entering turn %d", self.turns)
+        current_actor = self.p0
+        try:
+            # main game loop
+            self.turns += 1
+            logging.debug("Entering turn %d", self.turns)
 
-        # need to read a guess from the guesser
-        guess = self.guesser.p.readguess()
+            # need to read a guess from the guesser
+            current_actor = self.guesser
+            guess = self.guesser.p.readguess()
 
-
-        # check to see if this is a hit
-        ship = self.marker.board.get(guess, '')
-        if ship:
-            # we have a hit, if this hasn't been
-            # guessed before, reduce the lives of the ship
-            # by one
-            if guess not in self.guesser.guesses:
-                self.guesser.guesses.add(guess)
-                self.marker.lives[ship] -= 1
-                # check to see if we've killed the ship
-                if self.marker.lives[ship] == 0:
-                    # we've killed the ship, check to see if we've won
-                    if not self.marker.alive:
-                        # Just won.
-                        logging.info("Won the game!")
-                        self.guesser.p.sendline("W")
-                        self.winner = 1 - self.turns % 2
-                        self.finished = True
-                        return
+            # check to see if this is a hit
+            ship = self.marker.board.get(guess, '')
+            if ship:
+                # we have a hit, if this hasn't been
+                # guessed before, reduce the lives of the ship
+                # by one
+                if guess not in self.guesser.guesses:
+                    self.guesser.guesses.add(guess)
+                    self.marker.lives[ship] -= 1
+                    # check to see if we've killed the ship
+                    if self.marker.lives[ship] == 0:
+                        # we've killed the ship, check to see if we've won
+                        if not self.marker.alive:
+                            # Just won.
+                            logging.info("Won the game!")
+                            current_actor = self.guesser
+                            self.guesser.p.sendline("W")
+                            self.winner = 1 - self.turns % 2
+                            self.finished = True
+                            return
+                        else:
+                            # sunk a ship, but not dead yet
+                            logging.info("Sunk the %r ship", ship)
+                            current_actor = self.guesser
+                            self.guesser.p.sendline("S{}".format(ship))
                     else:
-                        # sunk a ship, but not dead yet
-                        logging.info("Sunk the %r ship", ship)
-                        self.guesser.p.sendline("S{}".format(ship))
+                        # just got a hit
+                        logging.info("Registered a hit")
+                        current_actor = self.guesser
+                        self.guesser.p.sendline("H")
                 else:
-                    # just got a hit
-                    logging.info("Registered a hit")
+                    # a hit, but already counted
+                    logging.info("Registered a REPEATED hit")
+                    current_actor = self.guesser
                     self.guesser.p.sendline("H")
             else:
-                # a hit, but already counted
-                logging.info("Registered a REPEATED hit")
-                self.guesser.p.sendline("H")
-        else:
-            # we had a miss, send a miss
-            logging.info("Miss")
-            self.guesser.p.sendline("M")
+                # we had a miss, send a miss
+                logging.info("Miss")
+                current_actor = self.guesser
+                self.guesser.p.sendline("M")
 
-        # send the guess to the marker
-        if self.finished:
-            self.marker.p.sendline("L")
-        else:
-            self.marker.p.sendguess(guess)
+            # send the guess to the marker
+            if self.finished:
+                current_actor = self.marker
+                self.marker.p.sendline("L")
+            else:
+                current_actor = self.marker
+                self.marker.p.sendguess(guess)
 
-       
-        # swap players
-        self.guesser, self.marker = self.marker, self.guesser
+            # swap players
+            self.guesser, self.marker = self.marker, self.guesser
+        except TimeoutError as e:
+            # handle a timeout error
+            actorid = self.player_lookup[current_actor]
+            logging.exception("Got a timeout player with current actor %d: %s", actorid, current_actor.name)
+            # the winner is the non actor
+            self.winner = 1 - actorid
+            self.finished = True
 
     def game(self):
         """ Run a game from start to finish """
         logging.info("Running a full game.")
 
-        
-        self._gameinit()
+        try: 
+            self._gameinit()
 
 
-        while not self.finished:
-            self.turn()
+            while not self.finished:
+                self.turn()
 
-        return self.winner if not self.switch else 1-self.winner
-
+            return self.winner if not self.switch else 1-self.winner
+        finally:
+            # try to clean up if there was an error
+            self.p0.p.p.terminate()
+            self.p1.p.p.terminate()
 
     def _validate_boards(self):
         """ Check to see if the board is valid
