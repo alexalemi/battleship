@@ -40,10 +40,10 @@ guessno = 0
 while True:
     try:
         if myturn:
-            guessno += 1
             # we need to send a guess
             guessx = guessno % 10
-            guessy = guessno // 10
+            guessy = (guessno // 10) % 10
+            guessno += 1
             logging.debug("My guess: (%d, %d)", guessx, guessy)
             comm.sendline("{},{}".format(guessx, guessy))
         

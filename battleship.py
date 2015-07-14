@@ -71,11 +71,11 @@ from random import randrange
 import functools
 import signal
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 ROOT = os.path.realpath(os.path.dirname(__file__))
 WORKERS = 10
-DEFAULTN = 10
+DEFAULTN = 25
 BUFFER = 2056
 PLAYERPATH = 'players'
 TIMEOUT = 2
@@ -202,7 +202,6 @@ class BattleshipPlayer(object):
         prog = os.path.join(ROOT, self.name)
         logging.debug("Launching process %s", prog)
         self.p = Process(prog)
-        self.p.delaybeforesend = 0
         #Try to tell each of them their opponents name
         self.p.sendline("{}, {}".format(self.playernum, self.opponent))
 
@@ -243,6 +242,9 @@ class BattleshipGame(object):
 
         self.finished = False
         self.winner = 0.5
+
+    def __repr__(self):
+        return "<BattleshipGame({},{}, turns:{})>".format(self.p0.name, self.p1.name, self.turns)
 
     def __del__(self):
         del self.p0
@@ -344,7 +346,7 @@ class BattleshipGame(object):
 
     def game(self):
         """ Run a game from start to finish """
-        logging.info("Running a full game.")
+        logging.info("Running a full game: %r", self)
 
         try: 
             self._gameinit()
@@ -388,16 +390,18 @@ def match(opp0, opp1, N=DEFAULTN):
     with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
         return [res for res in executor.map(unpackgame, ((opp0,opp1) for i in xrange(N)))]
 
+def getplayers():
+    candidates = os.listdir(PLAYERPATH)
+    fullpaths = ( os.path.join(PLAYERPATH, p) for p in candidates )
+    return [ x for x in fullpaths if os.path.isfile(x) and os.access(x, os.X_OK) ]
 
 def tourney(players=None, N=DEFAULTN):
     """ Run a tournament over all of the players """
-    players = players or [ os.path.join(PLAYERPATH,p) for p in os.listdir(PLAYERPATH) 
-            if os.access(os.path.join(PLAYERPATH,p), os.X_OK)]
+    players = players or getplayers() 
 
     logging.info("Running tournament for %r", players)
 
     combos = itertools.combinations(players, 2)
-
 
     allgames = []
     for combo in combos:
@@ -445,7 +449,7 @@ def make_leaderboard(ratings, allgames, players):
             headers=["rank", "name", "exposure", "mean", "sigma", "wins", "loses"])
     return boardentries, table
 
-def leaderboard(players=None, N=10, filename="leaderboard.txt"):
+def leaderboard(players=None, N=DEFAULTN, filename="leaderboard.txt"):
     """ Create a leaderboard, and optionally save it to a file """
     logging.info("Generating a leaderboard for players: %r, N=%d", players, N)
     ratings, allgames, players = get_ratings(players, N)
