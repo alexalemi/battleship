@@ -8,7 +8,7 @@ any responses
 """
 
 import logging
-from random import randrange
+from random import randrange, choice
 import util
 import os
 import socket
@@ -37,13 +37,17 @@ for line in board.splitlines():
 # Now have the main loop, alternating whether its our
 # turn or not
 
+allpos = set( (i,j) for i in xrange(10) for j in xrange(10) )
+guesses = set()
+
 guessno = 0
 while True:
     try:
         if myturn:
             # we need to send a guess
-            guessx = randrange(10)
-            guessy = randrange(10)
+            guess = choice(list(allpos.difference(guesses)))
+            guessx, guessy = guess
+            guesses.add(guess)
             logging.debug("My guess: (%d, %d)", guessx, guessy)
             comm.sendline("{},{}".format(guessx, guessy))
         

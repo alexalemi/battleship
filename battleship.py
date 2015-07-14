@@ -324,7 +324,10 @@ class BattleshipGame(object):
                     self.guesser.p.sendline("H")
             else:
                 # we had a miss, send a miss
-                logging.info("Miss")
+                if guess not in self.guesser.guesses:
+                    logging.info("Miss")
+                else:
+                    logging.info("REPEATED miss")
                 current_actor = self.guesser
                 self.guesser.p.sendline("M")
 
