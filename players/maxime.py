@@ -55,9 +55,10 @@ class TCPGame(Game):
         super().__init__(player)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect(('localhost', port))
+        self.sock_in = self.sock.makefile('r')
 
     def read_line(self):
-        return self.sock.recv(1024).decode('ascii').strip()
+        return self.sock_in.readline().strip()
 
     def write_line(self, line):
         self.sock.send(bytes(line + '\n', 'ascii'))
