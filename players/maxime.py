@@ -141,7 +141,11 @@ class Player:
 
     def shoot(self, positions):
         positions = set(positions).difference(self._guesses)
-        assert positions, 'positions is empty'
+
+        #assert positions, 'positions is empty'
+        if not positions: # TODO: this is a temporary fix
+            positions = self._parity_pos.difference(self._guesses)
+
         min_value = min(self._guess_map[pos] for pos in positions)
         return random.choice([pos for pos in positions if abs(self._guess_map[pos] - min_value) < 1e-6])
 
