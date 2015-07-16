@@ -4,7 +4,7 @@ import random
 import logging
 import sys
 import util
-logging.basicConfig(filename="logs/mine.log", level=logging.DEBUG)
+logging.basicConfig(filename="logs/frederic.log", level=logging.DEBUG)
 comm = util.Communication()
 
 blah_file = open("blah", "w")
