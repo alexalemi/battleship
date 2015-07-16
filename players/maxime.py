@@ -4,6 +4,7 @@ import random
 import socket
 import sys
 import math
+import copy
 
 
 class Game:
@@ -92,20 +93,24 @@ class Player:
         logging.debug('myturn=%s opponent=%s' % (myturn, opponent))
 
         # status of the opponent board
-        self._board = [[' ' for _ in range(10)] for _ in range(10)]
+        # ' ': unknow, 'M': miss, 'H': hit, 'A', 'B', 'S', 'D', 'P': ship
+        self._board = {(i, j): ' ' for i in range(10) for j in range(10)}
 
         # heat map
-        self._guess_map = [[0. for _ in range(10)] for _ in range(10)]
+        self._guess_map = {(i, j): 0. for i in range(10) for j in range(10)}
 
         for x in range(10): # increase the heat on the borders
-            self._guess_map[0][x] += 1.
-            self._guess_map[1][x] += 0.5
-            self._guess_map[8][x] += 0.5
-            self._guess_map[9][x] += 1.
-            self._guess_map[x][0] += 1.
-            self._guess_map[x][1] += 0.5
-            self._guess_map[x][8] += 0.5
-            self._guess_map[x][9] += 1.
+            self._guess_map[1, x] = self._guess_map[8, x] = 2.
+            self._guess_map[x, 1] = self._guess_map[x, 8] = 2.
+            self._guess_map[0, x] = self._guess_map[9, x] = 4.
+            self._guess_map[x, 0] = self._guess_map[x, 9] = 4.
+
+        # set of guesses
+        self._guesses = set()
+
+        # set of positions (either all even or all odd)
+        parity = random.randint(0, 1)
+        self._parity_pos = {(i, j) for i in range(10) for j in range(10) if (i + j) % 2 == parity}
 
     # generate our board
     def board(self):
@@ -120,29 +125,23 @@ class Player:
                 '0000000000',
                 '0000000000']
 
+    def shoot(self, positions):
+        positions = set(positions).difference(self._guesses)
+        assert(positions, 'positions empty')
+        min_value = min(self._guess_map[pos] for pos in positions)
+        return random.choice([pos for pos in positions if abs(self._guess_map[pos] - min_value) < 1e-6])
+
     def guess(self):
         # get all hits
-        hits = set()
-        for i in range(10):
-            for j in range(10):
-                if self._board[i][j] in 'HABSDP':
-                    hits.add((i, j))
+        hits = set(pos for pos in self._guesses if self._board[pos] in 'HABSDP')
 
         while hits:
             hit = hits.pop()
-            nearby_hits = list(filter(lambda c: self._board[c[0]][c[1]] in 'HABSDP', adjacent_coordinates(hit)))
+            nearby_hits = [pos for pos in adjacent_coordinates(hit) if self._board[pos] in 'HABSDP']
             logging.debug('hit: %s nearby_hits: %s' % (repr(hit), repr(nearby_hits)))
 
             if not nearby_hits:
-                # no hit nearby, we shoot!
-                min_value = min(self._guess_map[i][j] for i, j in adjacent_coordinates(hit))
-
-                guesses = []
-                for i, j in adjacent_coordinates(hit):
-                    if abs(self._guess_map[i][j] - min_value) < 1e-6:
-                        guesses.append((i, j))
-
-                return random.choice(guesses)
+                return self.shoot(adjacent_coordinates(hit))
             else:
                 # TODO: clean-up
                 cluster = {hit}
@@ -150,19 +149,19 @@ class Player:
                 direction = nearby_hit[0] - hit[0], nearby_hit[1] - hit[1]
 
                 current = hit
-                while valid_coordinate(current) and self._board[current[0]][current[1]] in 'HABSDP':
+                while valid_coordinate(current) and self._board[current] in 'HABSDP':
                     cluster.add(current)
                     current = current[0] + direction[0], current[1] + direction[1]
 
-                if valid_coordinate(current) and self._board[current[0]][current[1]] == ' ':
+                if valid_coordinate(current) and self._board[current] == ' ':
                     return current
 
                 current = hit
-                while valid_coordinate(current) and self._board[current[0]][current[1]] in 'HABSDP':
+                while valid_coordinate(current) and self._board[current] in 'HABSDP':
                     cluster.add(current)
                     current = current[0] - direction[0], current[1] - direction[1]
 
-                if valid_coordinate(current) and self._board[current[0]][current[1]] == ' ':
+                if valid_coordinate(current) and self._board[current] == ' ':
                     return current
 
                 logging.debug('cluster: %s' % repr(cluster))
@@ -170,29 +169,21 @@ class Player:
                     if point in hits:
                         hits.remove(point)
 
-        # guess using the guess_map
-        min_value = min(min(self._guess_map[i]) for i in range(10))
-
-        guesses = []
-        for i in range(10):
-            for j in range(10):
-                if abs(self._guess_map[i][j] - min_value) < 1e-6:
-                    guesses.append((i, j))
-
-        # pick a random one
-        return random.choice(guesses)
+        # otherwise, guess using the guess_map
+        return self.shoot(self._parity_pos)
 
     def result(self, guess, data):
+        self._guesses.add(guess)
+
         # update the guess map
-        for i, j in nearby_coordinates(guess, 1):
-            self._guess_map[i][j] += 2.0 - distance(guess, (i, j))
+        for pos in nearby_coordinates(guess, 1):
+            self._guess_map[pos] += 2.0 - distance(guess, pos)
 
         # update opponent board
-        i, j = guess
         if data[0] == 'S':
-            self._board[i][j] = data[1]
+            self._board[guess] = data[1]
         else:
-            self._board[i][j] = data
+            self._board[guess] = data
 
         self._print_board()
         self._print_guess_map()
@@ -210,14 +201,14 @@ class Player:
         logging.debug('opponent board:')
         logging.debug('#' * 12)
         for i in range(10):
-            logging.debug('#' + ''.join(self._board[i]) + '#')
+            logging.debug('#' + ''.join(self._board[i, j] for j in range(10)) + '#')
         logging.debug('#' * 12)
 
     def _print_guess_map(self):
         logging.debug('guess map:')
         logging.debug('#' * 52)
         for i in range(10):
-            logging.debug('#' + ''.join(map(lambda x: '%.2f ' % x, self._guess_map[i])) + '#')
+            logging.debug('#' + ''.join('%.2f ' % self._guess_map[i, j] for j in range(10)) + '#')
         logging.debug('#' * 52)
 
 if __name__ == '__main__':
