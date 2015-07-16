@@ -4,7 +4,9 @@ import random
 import socket
 import sys
 import math
-import copy
+
+
+SHIP_LENGTH = {'A': 5, 'B': 4, 'S': 3, 'D': 3, 'P': 2}
 
 
 class Game:
@@ -67,6 +69,18 @@ class TCPGame(Game):
 
 # Helpers
 
+def point_add(p1, p2):
+    return p1[0] + p2[0], p1[1] + p2[1]
+
+
+def point_sub(p1, p2):
+    return p1[0] - p2[0], p1[1] - p2[1]
+
+
+def point_mul(k, p):
+    return k * p[0], k * p[1]
+
+
 def distance(p1, p2):
     return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
 
@@ -96,6 +110,9 @@ class Player:
         # ' ': unknow, 'M': miss, 'H': hit, 'A', 'B', 'S', 'D', 'P': ship
         self._board = {(i, j): ' ' for i in range(10) for j in range(10)}
 
+        # set of guesses
+        self._guesses = set()
+
         # heat map
         self._guess_map = {(i, j): 0. for i in range(10) for j in range(10)}
 
@@ -104,9 +121,6 @@ class Player:
             self._guess_map[x, 1] = self._guess_map[x, 8] = 2.
             self._guess_map[0, x] = self._guess_map[9, x] = 4.
             self._guess_map[x, 0] = self._guess_map[x, 9] = 4.
-
-        # set of guesses
-        self._guesses = set()
 
         # set of positions (either all even or all odd)
         parity = random.randint(0, 1)
@@ -127,47 +141,114 @@ class Player:
 
     def shoot(self, positions):
         positions = set(positions).difference(self._guesses)
-        assert(positions, 'positions empty')
+        assert positions, 'positions is empty'
         min_value = min(self._guess_map[pos] for pos in positions)
         return random.choice([pos for pos in positions if abs(self._guess_map[pos] - min_value) < 1e-6])
 
-    def guess(self):
-        # get all hits
-        hits = set(pos for pos in self._guesses if self._board[pos] in 'HABSDP')
+    # find a guess or remove at least one hit from self.hits
+    def guess_target(self, hit):
+        nearby_hits = set(adjacent_coordinates(hit)).intersection(self.hits)
+        logging.debug('* found hit: %s nearby_hits: %s' % (repr(hit), repr(nearby_hits)))
 
-        while hits:
-            hit = hits.pop()
-            nearby_hits = [pos for pos in adjacent_coordinates(hit) if self._board[pos] in 'HABSDP']
-            logging.debug('hit: %s nearby_hits: %s' % (repr(hit), repr(nearby_hits)))
+        for nearby_hit in nearby_hits:
+            # grab all hits on the same line, starting from `hit`
+            cluster = {hit, nearby_hit}
+            direction = point_sub(nearby_hit, hit)
 
-            if not nearby_hits:
-                return self.shoot(adjacent_coordinates(hit))
+            current = point_add(nearby_hit, direction)
+            while valid_coordinate(current) and current in self.hits:
+                cluster.add(current)
+                current = point_add(current, direction)
+
+            if valid_coordinate(current) and self._board[current] == ' ':
+                return current
+
+            current = point_sub(hit, direction)
+            while valid_coordinate(current) and current in self.hits:
+                cluster.add(current)
+                current = point_sub(current, direction)
+
+            if valid_coordinate(current) and self._board[current] == ' ':
+                return current
+
+            # found a cluster
+            logging.debug('** found cluster: %s' % repr(cluster))
+            ships = {self._board[pos]: pos for pos in cluster if self._board[pos] in 'ABSDP'}
+
+            if not ships:
+                logging.debug('** no ship, looking further')
             else:
-                # TODO: clean-up
-                cluster = {hit}
-                nearby_hit = nearby_hits[0]
-                direction = nearby_hit[0] - hit[0], nearby_hit[1] - hit[1]
+                ships_length = sum(SHIP_LENGTH[ship] for ship in ships)
+                if ships_length == len(cluster):
+                    # that's not exactly true, but whatever...
+                    logging.debug('** ships %s destroyed' % repr(ships.keys()))
+                    for pos in cluster:
+                        self.hits.remove(pos)
 
-                current = hit
-                while valid_coordinate(current) and self._board[current] in 'HABSDP':
-                    cluster.add(current)
-                    current = current[0] + direction[0], current[1] + direction[1]
+                    return None
+                else:
+                    # there is another ship somewhere
+                    logging.debug('*** looking for a hidden ship')
+                    positions = set()
+                    for ship, pos in ships.items():
+                        positions.update(adjacent_coordinates(pos))
 
-                if valid_coordinate(current) and self._board[current] == ' ':
-                    return current
+                    positions = positions.difference(cluster)
+                    hits = positions.intersection(self.hits)
 
-                current = hit
-                while valid_coordinate(current) and self._board[current] in 'HABSDP':
-                    cluster.add(current)
-                    current = current[0] - direction[0], current[1] - direction[1]
+                    if not hits:
+                        logging.debug('** all ships are in that line')
 
-                if valid_coordinate(current) and self._board[current] == ' ':
-                    return current
+                        for ship, sunk_pos in ships.items():
+                            possibilities = []
+                            ship_length = SHIP_LENGTH[ship]
+                            for begin in cluster:
+                                points = {begin}
+                                current = point_add(begin, direction)
+                                while current in self.hits and len(points) < ship_length:
+                                    points.add(current)
+                                    current = point_add(current, direction)
 
-                logging.debug('cluster: %s' % repr(cluster))
-                for point in cluster:
-                    if point in hits:
-                        hits.remove(point)
+                                if len(points) == ship_length and sunk_pos in points:
+                                    possibilities.append(points)
+                                    logging.debug('*** possibility: %s' % repr(points))
+
+                            if len(possibilities) == 1:
+                                logging.debug('*** only one possibility: %s' % repr(possibilities))
+                                for pos in possibilities[0]:
+                                    self.hits.remove(pos)
+
+                                return None
+
+                        # otherwise, shoot randomly
+                        positions = set()
+                        for pos in cluster:
+                            positions.update(adjacent_coordinates(pos))
+                        positions = positions.difference(cluster)
+                        hits = positions.intersection(self.hits)
+
+                        if not hits:
+                            logging.debug('** not found, strike randomly')
+                            return self.shoot(positions)
+                        else:
+                            logging.debug('** looking further in another direction')
+                            return self.guess_target(random.choice(list(hits)))
+                    else:
+                        logging.debug('** looking further in another direction')
+                        return self.guess_target(random.choice(list(hits)))
+
+        logging.debug('* either no nearby hits, or no ship in a hit line')
+        return self.shoot(adjacent_coordinates(hit))
+
+    def guess(self):
+        # get all hits to find a target
+        self.hits = set(pos for pos in self._guesses if self._board[pos] in 'HABSDP')
+
+        while self.hits:
+            hit = next(iter(self.hits))
+            guess = self.guess_target(hit)
+            if guess:
+                return guess
 
         # otherwise, guess using the guess_map
         return self.shoot(self._parity_pos)
@@ -186,7 +267,7 @@ class Player:
             self._board[guess] = data
 
         self._print_board()
-        self._print_guess_map()
+        #self._print_guess_map()
 
     def opponent_guess(self, guess):
         pass
