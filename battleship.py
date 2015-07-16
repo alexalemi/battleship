@@ -71,7 +71,8 @@ from random import randrange
 import functools
 import signal
 import logging
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='logs/battleship.log',level=logging.DEBUG)
 
 ROOT = os.path.realpath(os.path.dirname(__file__))
 WORKERS = 10
@@ -158,7 +159,11 @@ class Process(object):
         """ Read a guess from the player, report as tuple """
         line = self.readline(*args, **kwargs)
         logging.debug("Got raw guess line %s", line)
-        guess = tuple(map(int, line.strip().split(",")))
+        try:
+            guess = tuple(map(int, line.strip().split(",")))
+        except ValueError as e:
+            logging.exception("Got a ValueError on our readguess, got %r", line)
+            raise
         logging.info("%s guessed %r", self.shortname, guess)
         return guess
 
@@ -348,6 +353,15 @@ class BattleshipGame(object):
             # the winner is the non actor
             self.winner = 1 - actorid
             self.finished = True
+        except ValueError as e:
+            # we had a value error trying to read the guess
+            actorid = self.player_lookup[current_actor]
+            logging.exception("Got a valueerror with current actor %d: %s", actorid, current_actor.name)
+            # the winner is the non actor
+            self.winner = 1 - actorid
+            self.finished = True
+
+
 
     def game(self):
         """ Run a game from start to finish """
