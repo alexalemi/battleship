@@ -591,6 +591,7 @@ if __name__ == "__main__":
     TIMEOUT = args.timeout
     RECORDPATH = args.RECORDPATH
     PLAYERPATH = args.PLAYERPATH
+    SAVERECORD = args.json
 
     # handle the cases
     if args.leaderboard is not None:
