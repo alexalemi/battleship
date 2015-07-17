@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard{% endblock %}
+
+{% block main %}
+    <center> 
+    <br/><br/>
+    <!-- <h2>Leaderboard</h2> -->
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th class="mdl-data-table__cell--non-numeric">Name</th>
+          <th>Exposure</th>
+          <th>Mean</th>
+          <th>Sigma</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Errors</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for row in leaderboard %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td class="mdl-data-table__cell-non-numeric">{{ row.name }}</td>
+          <td>{{ row.exposure }}</td>
+          <td>{{ row.mean }}</td>
+          <td>{{ row.sigma }}</td>
+          <td>{{ row.wins }}</td>
+          <td>{{ row.losses }}</td>
+          <td>{{ row.errors }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </center>
+
+{% endblock %}

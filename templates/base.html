@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="custom.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Battleship</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/about.html">About</a>
+        <!-- <a class="mdl-navigation__link" href="about.html">About</a> -->
+        <a class="mdl-navigation__link" href="/players">Players</a>
+        <a class="mdl-navigation__link" href="/games">Games</a>
+        <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship">Github</a>
+      </nav>
+    </div>
+  </header>
+  <!-- <div class="mdl-layout__drawer"> -->
+  <!--   <span class="mdl-layout-title">Battleship</span> -->
+  <!--   <nav class="mdl-navigation"> -->
+  <!--     <a class="mdl-navigation__link" href="">About</a> -->
+  <!--     <a class="mdl-navigation__link" href="">Players</a> -->
+  <!--     <a class="mdl-navigation__link" href="">Games</a> -->
+  <!--     <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship" class="mdl-badge">Github</a> -->
+  <!--   </nav> -->
+  <!-- </div> -->
+  <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+
+    {% block main %}
+    {% endblock %}
+
+  </div>
+  </main>
+</div>
+
+</body>
+</html>

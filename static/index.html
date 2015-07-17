@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaderboard</title>
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="custom.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Battleship</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/about.html">About</a>
+        <!-- <a class="mdl-navigation__link" href="about.html">About</a> -->
+        <a class="mdl-navigation__link" href="/players">Players</a>
+        <a class="mdl-navigation__link" href="/games">Games</a>
+        <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship">Github</a>
+      </nav>
+    </div>
+  </header>
+  <!-- <div class="mdl-layout__drawer"> -->
+  <!--   <span class="mdl-layout-title">Battleship</span> -->
+  <!--   <nav class="mdl-navigation"> -->
+  <!--     <a class="mdl-navigation__link" href="">About</a> -->
+  <!--     <a class="mdl-navigation__link" href="">Players</a> -->
+  <!--     <a class="mdl-navigation__link" href="">Games</a> -->
+  <!--     <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship" class="mdl-badge">Github</a> -->
+  <!--   </nav> -->
+  <!-- </div> -->
+  <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+
+    
+    <center> 
+    <br/><br/>
+    <!-- <h2>Leaderboard</h2> -->
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th class="mdl-data-table__cell--non-numeric">Name</th>
+          <th>Exposure</th>
+          <th>Mean</th>
+          <th>Sigma</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Errors</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        
+        <tr>
+          <td>1</td>
+          <td class="mdl-data-table__cell-non-numeric">maxime.py</td>
+          <td>27.2703</td>
+          <td>30.136</td>
+          <td>0.955224</td>
+          <td>100</td>
+          <td>25</td>
+          <td></td>
+        </tr>
+        
+        <tr>
+          <td>2</td>
+          <td class="mdl-data-table__cell-non-numeric">frederic.py</td>
+          <td>23.9715</td>
+          <td>26.5683</td>
+          <td>0.865612</td>
+          <td>81</td>
+          <td>44</td>
+          <td></td>
+        </tr>
+        
+        <tr>
+          <td>3</td>
+          <td class="mdl-data-table__cell-non-numeric">hunter_parity.py</td>
+          <td>23.5777</td>
+          <td>26.2867</td>
+          <td>0.902999</td>
+          <td>70</td>
+          <td>55</td>
+          <td></td>
+        </tr>
+        
+        <tr>
+          <td>4</td>
+          <td class="mdl-data-table__cell-non-numeric">hunter.py</td>
+          <td>22.5573</td>
+          <td>25.2228</td>
+          <td>0.888524</td>
+          <td>65</td>
+          <td>60</td>
+          <td></td>
+        </tr>
+        
+        <tr>
+          <td>5</td>
+          <td class="mdl-data-table__cell-non-numeric">tile.py</td>
+          <td>19.4368</td>
+          <td>22.1496</td>
+          <td>0.904285</td>
+          <td>39</td>
+          <td>86</td>
+          <td></td>
+        </tr>
+        
+        <tr>
+          <td>6</td>
+          <td class="mdl-data-table__cell-non-numeric">randguess.py</td>
+          <td>16.1678</td>
+          <td>19.0464</td>
+          <td>0.959525</td>
+          <td>20</td>
+          <td>105</td>
+          <td></td>
+        </tr>
+        
+      </tbody>
+    </table>
+    </center>
+
+
+
+  </div>
+  </main>
+</div>
+
+</body>
+</html>

@@ -139,7 +139,8 @@ class Process(object):
                 continue
 
         logger.debug("Creating socket: %r", server_address)
-        self.p = subprocess.Popen([path, str(self.port)], *args, **kwargs) #, stdin=subprocess.PIPE,
+        self.p = subprocess.Popen([path, str(self.port)], stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, *args, **kwargs) #, stdin=subprocess.PIPE,
                     #stdout=subprocess.PIPE, stderr=subprocess.PIPE, *args, **kwargs)
 
         self.sock.listen(1)
@@ -276,8 +277,9 @@ class BattleshipGame(object):
 
     def saverecord(self):
         if SAVERECORD:
-            with open(os.path.join(RECORDPATH,
-                "{}.json".format(self.pk)), 'w') as f:
+            recordpath = os.path.join(RECORDPATH, "{}.json".format(self.pk))
+            logger.info("Saving record to %s", recordpath)
+            with open(recordpath, 'w') as f:
                 json.dump(self.record, f, indent=4)
 
     def _gameinit(self):
@@ -421,10 +423,21 @@ class BattleshipGame(object):
             self.record["time"] = time.time() - self.starttime
             self.record["winner"] = self.winner
             self.record["numturns"] = self.turns
-            self.saverecord()
 
             self.p0.p.p.terminate()
             self.p1.p.p.terminate()
+
+            # self.record['p0stdin'] = self.p0.p.p.stdin.read()
+            self.record['p0stdout'] = self.p0.p.p.stdout.read()
+            self.record['p0stderr'] = self.p0.p.p.stderr.read()
+            # self.record['p1stdin'] = self.p1.p.p.stdin.read()
+            self.record['p1stdout'] = self.p1.p.p.stdout.read()
+            self.record['p1stderr'] = self.p1.p.p.stderr.read()
+            self.saverecord()
+
+            self.p0.p.p.kill()
+            self.p1.p.p.kill()
+
 
     def _validate_board(self, board):
         """ Validate a single board """
