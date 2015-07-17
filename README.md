@@ -59,5 +59,5 @@ or, if you just lost, you will recieve a single `L\n`:
 
 if you are running this locally, it uses the following external packages:
     
-    * [futures](https://pypi.python.org/pypi/futures)  (e.g. `pip install futures`)
-    * [trueskill](https://pypi.python.org/pypi/trueskill/0.4.3) - if you want to generate rankings
+ * [futures](https://pypi.python.org/pypi/futures)  (e.g. `pip install futures`)
+ * [trueskill](https://pypi.python.org/pypi/trueskill/0.4.3) - if you want to generate rankings

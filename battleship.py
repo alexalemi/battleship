@@ -59,6 +59,8 @@ your opponents guess in the form a comma separated tuple
 """
 
 import os
+import argparse
+import json
 import socket
 from collections import Counter
 import sys
@@ -72,13 +74,24 @@ import functools
 import signal
 import logging
 # logging.basicConfig(level=logging.INFO)
-logging.basicConfig(filename='logs/battleship.log',level=logging.DEBUG)
+
+logger = logging.getLogger('battleship')
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh = logging.FileHandler('logs/battleship.log')
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
+# logging.basicConfig(filename='logs/battleship.log',level=logging.DEBUG)
 
 ROOT = os.path.realpath(os.path.dirname(__file__))
 WORKERS = 2
 DEFAULTN = 25
+SAVERECORD=False
 BUFFER = 2056
 PLAYERPATH = 'players'
+RECORDPATH = 'records'
 TIMEOUT = 2
 
 SHIP_LENGTHS = {"A":5, "B":4, "D":3, "S":3, "P":2}
@@ -108,7 +121,7 @@ class Process(object):
     """ A small wrapper to abstract the interaction with the process """
     def __init__(self, path, port=None, *args,**kwargs):
         self.shortname = os.path.basename(path)
-        logging.debug("Initializing process for %s, path:%s", self.shortname, path)
+        logger.debug("Initializing process for %s, path:%s", self.shortname, path)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
         done = False
@@ -119,17 +132,17 @@ class Process(object):
                 self.sock.bind(server_address)
                 break
             except socket.error:
-                logging.warning("We hit a bad port (%d) bind, try again", self.port)
+                logger.warning("We hit a bad port (%d) bind, try again", self.port)
                 # we presumabely failed to bind, try again, but sleep a bit
                 time.sleep(0.01)
                 continue
 
-        logging.debug("Creating socket: %r", server_address)
+        logger.debug("Creating socket: %r", server_address)
         self.p = subprocess.Popen([path, str(self.port)], *args, **kwargs) #, stdin=subprocess.PIPE,
                     #stdout=subprocess.PIPE, stderr=subprocess.PIPE, *args, **kwargs)
 
         self.sock.listen(1)
-        logging.debug("Waiting for connection...")
+        logger.debug("Waiting for connection...")
         self.connection, self.client_address = self.sock.accept()
         self.connection_file = self.connection.makefile("r+", bufsize=BUFFER)
 
@@ -144,7 +157,7 @@ class Process(object):
     @timelimit
     def sendline(self, s, *args, **kwargs):
         """ Send a line by writing a line to the connection_file buffer """
-        logging.debug("Sending %r to %s", s, self.shortname)
+        logger.debug("Sending %r to %s", s, self.shortname)
         self.connection_file.write(s + '\n')
         self.connection_file.flush()
     
@@ -152,27 +165,27 @@ class Process(object):
     def readline(self, bts=16,*args, **kwargs):
         """ Read a line from the connection file_handler object """
         msg = self.connection_file.readline()
-        logging.debug("Retrieved %r from %s", msg, self.shortname)
+        logger.debug("Retrieved %r from %s", msg, self.shortname)
         return msg
 
     def readguess(self, *args, **kwargs):
         """ Read a guess from the player, report as tuple """
         line = self.readline(*args, **kwargs)
-        logging.debug("Got raw guess line %s", line)
+        logger.debug("Got raw guess line %s", line)
         try:
             guess = tuple(map(int, line.strip().split(",")))
         except ValueError as e:
-            logging.exception("Got a ValueError on our readguess, got %r", line)
+            logger.exception("Got a ValueError on our readguess, got %r", line)
             raise
-        logging.info("%s guessed %r", self.shortname, guess)
-        return guess
+        logger.info("%s guessed %r", self.shortname, guess)
+        return guess, line
 
     def sendguess(self, guess):
         self.sendline("{},{}".format(*guess))
 
     def readboard(self, *args, **kwargs):
         """ Read an entire board """
-        logging.debug("Attempting to read a board from %s", self.shortname)
+        logger.debug("Attempting to read a board from %s", self.shortname)
         boardstrings = []
         for i in xrange(10):
             boardstrings.append( self.readline(1).strip() )
@@ -207,7 +220,7 @@ class BattleshipPlayer(object):
     def initialize_process(self):
         # Hold the popen objects for the two players
         prog = os.path.join(ROOT, self.name)
-        logging.debug("Launching process %s", prog)
+        logger.debug("Launching process %s", prog)
         self.p = Process(prog)
         #Try to tell each of them their opponents name
         self.p.sendline("{}, {}".format(self.playernum, self.opponent))
@@ -228,37 +241,48 @@ class BattleshipPlayer(object):
 class BattleshipGame(object):
     """ A single instance of a battleship game """
 
-    def __init__(self, opp0, opp1):
-
+    def __init__(self, opp0, opp1, pk=0):
+        self.pk = pk
         if random.random() < 0.5:
             self.switch = False
         else:
             opp0, opp1 = opp1, opp0
             self.switch = True
+
+        self.p0name = os.path.basename(opp0)
+        self.p1name = os.path.basename(opp1)
         self.p0 = BattleshipPlayer(opp0, opp1, 0)
         self.p1 = BattleshipPlayer(opp1, opp0, 1)
         
         self.player_lookup = { self.p0: 0, self.p1: 1}
         
         self.current_player = 0
-
         self.turns = 0
-
         self.guesser = self.p0
         self.marker = self.p1
 
         self.finished = False
         self.winner = 0.5
 
+        self.record = {"player0": self.p0name, "player1": self.p1name, "turns": [] }
+
     def __repr__(self):
-        return "<BattleshipGame({},{}, turns:{})>".format(self.p0.name, self.p1.name, self.turns)
+        return "<BattleshipGame({},{}, turns:{})>".format(self.p0name, self.p1name, self.turns)
 
     def __del__(self):
         del self.p0
         del self.p1
 
+    def saverecord(self):
+        if SAVERECORD:
+            with open(os.path.join(RECORDPATH,
+                "{}.json".format(self.pk)), 'w') as f:
+                json.dump(self.record, f, indent=4)
+
     def _gameinit(self):
         """ Initialize a game and catch errors """
+        self.starttime = time.time()
+        self.record['starttime'] = self.starttime
         try:
             player = 0
             self.p0.initialize_process()
@@ -266,31 +290,38 @@ class BattleshipGame(object):
             self.p1.initialize_process()
             player = 0
             self.p0.read_board()
+            self.record["player0board"] = { "{},{}".format(*k):v for k,v in self.p0.board.iteritems() }
             player = 1
             self.p1.read_board()
+            self.record["player1board"] = { "{},{}".format(*k):v for k,v in self.p1.board.iteritems() }
             self._validate_boards()
         except BoardError as e:
-            logging.exception("Got a board error for player %d", player)
+            logger.exception("Got a board error for player %d", player)
             self.winner = 1-e.player
             self.finished = True
+            self.record["error"] = str(e)
             return 1
         except TimeoutError as e:
-            logging.exception("Got a timeout error for player %d", player)
+            logger.exception("Got a timeout error for player %d", player)
             self.winner = 1-player
             self.finished = True
+            self.record['error'] = str(e)
             return 1
         return 0
 
     def turn(self):
         current_actor = self.p0
+        turnrec = { "active": self.player_lookup[self.guesser], "starttime": time.time() }
         try:
             # main game loop
             self.turns += 1
-            logging.debug("Entering turn %d", self.turns)
+            turnrec['turnnum'] = self.turns
+            logger.debug("Entering turn %d", self.turns)
 
             # need to read a guess from the guesser
             current_actor = self.guesser
-            guess = self.guesser.p.readguess()
+            guess, line = self.guesser.p.readguess()
+            turnrec['guess'] = line
 
             # check to see if this is a hit
             ship = self.marker.board.get(guess, '')
@@ -306,70 +337,79 @@ class BattleshipGame(object):
                         # we've killed the ship, check to see if we've won
                         if not self.marker.alive:
                             # Just won.
-                            logging.info("Won the game!")
+                            logger.info("Won the game!")
                             current_actor = self.guesser
                             self.guesser.p.sendline("W")
+                            turnrec['response'] = "W"
                             self.winner = 1 - self.turns % 2
                             self.finished = True
                             return
                         else:
                             # sunk a ship, but not dead yet
-                            logging.info("Sunk the %r ship", ship)
+                            logger.info("Sunk the %r ship", ship)
                             current_actor = self.guesser
                             self.guesser.p.sendline("S{}".format(ship))
+                            turnrec['response'] = "S{}".format(ship)
                     else:
                         # just got a hit
-                        logging.info("Registered a hit")
+                        logger.info("Registered a hit")
                         current_actor = self.guesser
                         self.guesser.p.sendline("H")
+                        turnrec['response'] = "H"
                 else:
                     # a hit, but already counted
-                    logging.info("Registered a REPEATED hit")
+                    logger.info("Registered a REPEATED hit")
                     current_actor = self.guesser
                     self.guesser.p.sendline("H")
+                    turnrec['response'] = "H"
             else:
                 # we had a miss, send a miss
                 if guess not in self.guesser.guesses:
-                    logging.info("Miss")
+                    logger.info("Miss")
                 else:
-                    logging.info("REPEATED miss")
+                    logger.info("REPEATED miss")
                 current_actor = self.guesser
                 self.guesser.p.sendline("M")
+                turnrec['response'] = "M"
 
             # send the guess to the marker
             if self.finished:
                 current_actor = self.marker
                 self.marker.p.sendline("L")
+                turnrec['notify'] = "L"
             else:
                 current_actor = self.marker
                 self.marker.p.sendguess(guess)
+                turnrec['notify'] = "{},{}\n".format(*guess)
 
             # swap players
             self.guesser, self.marker = self.marker, self.guesser
         except TimeoutError as e:
             # handle a timeout error
             actorid = self.player_lookup[current_actor]
-            logging.exception("Got a timeout player with current actor %d: %s", actorid, current_actor.name)
+            logger.exception("Got a timeout player with current actor %d: %s", actorid, current_actor.name)
             # the winner is the non actor
+            self.record['error'] = str(e)
             self.winner = 1 - actorid
             self.finished = True
         except ValueError as e:
             # we had a value error trying to read the guess
             actorid = self.player_lookup[current_actor]
-            logging.exception("Got a valueerror with current actor %d: %s", actorid, current_actor.name)
+            logger.exception("Got a valueerror with current actor %d: %s", actorid, current_actor.name)
             # the winner is the non actor
+            self.record['error'] = str(e)
             self.winner = 1 - actorid
             self.finished = True
-
-
+        finally:
+            turnrec['elapsed'] = time.time() - turnrec['starttime']
+            self.record['turns'].append(turnrec)
 
     def game(self):
         """ Run a game from start to finish """
-        logging.info("Running a full game: %r", self)
+        logger.info("Running a full game: %r", self)
 
         try: 
             self._gameinit()
-
 
             while not self.finished:
                 self.turn()
@@ -377,6 +417,11 @@ class BattleshipGame(object):
             return self.winner if not self.switch else 1-self.winner
         finally:
             # try to clean up if there was an error
+            self.record["time"] = time.time() - self.starttime
+            self.record["winner"] = self.winner
+            self.record["numturns"] = self.turns
+            self.saverecord()
+
             self.p0.p.p.terminate()
             self.p1.p.p.terminate()
 
@@ -386,7 +431,7 @@ class BattleshipGame(object):
         validcount = Counter(SHIP_LENGTHS)
         count = Counter(board.values())
         if count != validcount:
-            logging.warning("Board has an invalid ship count")
+            logger.warning("Board has an invalid ship count")
             return False
         # now check to make sure each ship is co-linear, and has the right range
         for ship,length in SHIP_LENGTHS.iteritems():
@@ -396,11 +441,11 @@ class BattleshipGame(object):
 
             #colinearity
             if not ( (len(set(xs)) == 1) or (len(set(ys)) == 1) ):
-                logging.warning("Board has a non-colinear ship %s", ship)
+                logger.warning("Board has a non-colinear ship %s", ship)
                 return False
             # check to make sure the span of each ship is correct
             if not ( (max(xs)-min(xs) == length-1) or (max(ys)-min(ys) == length-1) ):
-                logging.warning("Board has a bad span for ship %s", ship)
+                logger.warning("Board has a bad span for ship %s", ship)
                 return False
 
         return True
@@ -412,16 +457,16 @@ class BattleshipGame(object):
         # First try to check to make sure each ship 
         # appears the correct number of times
         if not self._validate_board(self.p0.board):
-            logging.warning("Error on player 0 board")
+            logger.warning("Error on player 0 board")
             raise BoardError(0)
         if not self._validate_board(self.p1.board):
-            logging.warning("Error on player 1 board")
+            logger.warning("Error on player 1 board")
             raise BoardError(1)
 
-def game(opp0, opp1):
+def game(opp0, opp1, pk=0):
     """ Run a single game between two opponents,
         returns either 0 or 1 based on the winner """
-    engine = BattleshipGame(opp0, opp1)
+    engine = BattleshipGame(opp0, opp1, pk)
     return engine.game()
 
 def unpackgame(opps):
@@ -437,7 +482,7 @@ def unpackres(opps):
 def match(opp0, opp1, N=DEFAULTN):
     """ Run a match between opp0 and opp1, which consists of N games """
     with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
-        return [res for res in executor.map(unpackgame, ((opp0,opp1) for i in xrange(N)))]
+        return [res for res in executor.map(unpackgame, ((opp0,opp1,i) for i in xrange(N)))]
 
 def getplayers():
     candidates = os.listdir(PLAYERPATH)
@@ -448,16 +493,18 @@ def tourney(players=None, N=DEFAULTN):
     """ Run a tournament over all of the players """
     players = players or getplayers() 
 
-    logging.info("Running tournament for %r", players)
+    logger.info("Running tournament for %r", players)
 
     combos = itertools.combinations(players, 2)
 
     # allgames = []
+    gameno = 0
     with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
         matchups = []
         for combo in combos:
             for i in xrange(N):
-                matchups.append((combo[0],combo[1]))
+                matchups.append((combo[0],combo[1],gameno))
+                gameno += 1
         allgames = [res for res in executor.map(unpackres, matchups)]
 
     return allgames, players
@@ -472,7 +519,7 @@ def get_ratings(players=None, N=DEFAULTN):
     for p in players:
         ratings[p] = trueskill.Rating()
 
-    logging.info("Calculating ratings...")
+    logger.info("Calculating ratings...")
     random.shuffle(allgames)
     for winner,loser in allgames:
         ratings[winner], ratings[loser] = trueskill.rate_1vs1(ratings[winner], ratings[loser])
@@ -497,19 +544,71 @@ def make_leaderboard(ratings, allgames, players):
 
 def leaderboard(players=None, N=DEFAULTN, filename="leaderboard.txt"):
     """ Create a leaderboard, and optionally save it to a file """
-    logging.info("Generating a leaderboard for players: %r, N=%d", players, N)
+    logger.info("Generating a leaderboard for players: %r, N=%d", players, N)
     ratings, allgames, players = get_ratings(players, N)
     board, table = make_leaderboard(ratings, allgames, players)
     print table
     if filename:
-        logging.info("Saving leaderboard to file: %s", filename)
+        logger.info("Saving leaderboard to file: %s", filename)
         with open(filename,"w") as f:
             f.write(table)
             f.write('\n')
     return board, table
 
+
+#---------------------------------------------
+# Command line handling
+#---------------------------------------------
+parser = argparse.ArgumentParser(description="A dirt simple battleship engine.")
+
+parser.add_argument("--leaderboard", '-l', nargs='*', help="Generate the leaderboard")
+parser.add_argument("--tournament", '-t', nargs='*', help="Run a tournament between the existing players (or all if empty)")
+parser.add_argument("--battle", '-b', nargs=2, help="Run a game between two programs")
+parser.add_argument("-n", nargs=1, default=0, type=int, help="The number of games to run")
+parser.add_argument("--json","-j", action='store_true', help="Save json output")
+parser.add_argument("--workers", "-w", default=WORKERS, help="Number of processes to use")
+parser.add_argument("--timeout", default=TIMEOUT, help="Timeout for each action")
+parser.add_argument("--verbose", '-v', default=0, action='count', help="Verbosity for logs")
+parser.add_argument("--records", '-r', default=RECORDPATH, help="Path to records")
+parser.add_argument("--playerpath", '-p', default=PLAYERPATH, help="Path to players")
+
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print __doc__
+    args = parser.parse_args()
+   
+    # Setup verbosity
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.ERROR)
+    if args.verbose == 1:
+        ch.setLevel(logging.INFO)
+    elif args.verbose > 1:
+        print "SETTING DEBUG"
+        ch.setLevel(logging.DEBUG)
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+    logger.debug("TESTING")
+
+    # handle the big constants
+    TIMEOUT = args.timeout
+    RECORDPATH = args.RECORDPATH
+    PLAYERPATH = args.PLAYERPATH
+
+    # handle the cases
+    if args.leaderboard is not None:
+        # run a leaderboard, clear all of the records
+        records = glob.glob(os.path.join(RECORDPATH,'*.json'))
+        for record in records:
+            os.remove(record)
+        SAVERECORD = True
+        leaderboard(players=args.leaderboard, N=args.n or DEFAULTN)
+    elif args.tournament is not None:
+        print tourney(players=args.tournmanet, N=args.n or DEFAULTN)
+    elif args.battle is not None:
+        N = args.n or 1
+        for i in xrange(N):
+            print "Result for game {}: {}".format(i, game(args.battle[0], args.battle[1]))
     else:
-        print game(sys.argv[1], sys.argv[2])
+        print "Must choose one of battle, tournament, or leaderboard"
+        parser.print_help()
+        sys.exit(1)
+
+
