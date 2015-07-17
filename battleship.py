@@ -61,6 +61,7 @@ your opponents guess in the form a comma separated tuple
 import os
 import argparse
 import json
+import glob
 import socket
 from collections import Counter
 import sys
@@ -589,8 +590,8 @@ if __name__ == "__main__":
 
     # handle the big constants
     TIMEOUT = args.timeout
-    RECORDPATH = args.RECORDPATH
-    PLAYERPATH = args.PLAYERPATH
+    RECORDPATH = args.records
+    PLAYERPATH = args.playerpath
     SAVERECORD = args.json
 
     # handle the cases
