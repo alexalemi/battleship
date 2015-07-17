@@ -29,7 +29,7 @@
           <td>{{ row.sigma }}</td>
           <td>{{ row.wins }}</td>
           <td>{{ row.losses }}</td>
-          <td>{{ row.errors }}</td>
+          <td>{{ errors[row.name]|length }}</td>
         </tr>
         {% endfor %}
       </tbody>

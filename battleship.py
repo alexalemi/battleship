@@ -101,6 +101,8 @@ class TimeoutError(Exception):
     def __init__(self, signum=None, frame=None):
         self.signum = signum
         self.frame = frame
+    def __str__(self):
+        return "there was a timeout error"
 
 def signal_handler(signum=None, frame=None):
     raise TimeoutError(signum, frame)
@@ -202,6 +204,8 @@ class Process(object):
 class BoardError(Exception):
     def __init__(self, player):
         self.player = player
+    def __str__(self):
+        return "there was an invalid board reported"
 
 
 class BattleshipPlayer(object):
@@ -266,7 +270,7 @@ class BattleshipGame(object):
         self.finished = False
         self.winner = 0.5
 
-        self.record = {"player0": self.p0name, "player1": self.p1name, "turns": [] }
+        self.record = {"player0": self.p0name, "player1": self.p1name, "turns": [], "id": self.pk }
 
     def __repr__(self):
         return "<BattleshipGame({},{}, turns:{})>".format(self.p0name, self.p1name, self.turns)
@@ -403,6 +407,11 @@ class BattleshipGame(object):
             self.record['error'] = str(e)
             self.winner = 1 - actorid
             self.finished = True
+        except Exception as e:
+            # we had some other kind of exception
+            self.record['error'] = str(e)
+            self.winner = 1 - actorid
+            self.finished=True
         finally:
             turnrec['elapsed'] = time.time() - turnrec['starttime']
             self.record['turns'].append(turnrec)

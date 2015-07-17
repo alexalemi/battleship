@@ -11,7 +11,7 @@ blah_file = open("blah", "w")
 
 rows = 10
 cols = 10
-NUM_ITERATIONS = 1300
+NUM_ITERATIONS = 1000
 
 codes = {'A': 1, 'B' : 2, 'S': 3, 'D': 4, 'P': 5, 'H' : 6, 'M': 7}
 sunk = 8
