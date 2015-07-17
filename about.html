@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>About</title>
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="custom.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Battleship</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/about.html">About</a>
+        <!-- <a class="mdl-navigation__link" href="about.html">About</a> -->
+        <!-- <a class="mdl-navigation__link" href="/players">Players</a> -->
+        <a class="mdl-navigation__link" href="/games">Games</a>
+        <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship">Github</a>
+      </nav>
+    </div>
+  </header>
+  <!-- <div class="mdl-layout__drawer"> -->
+  <!--   <span class="mdl-layout-title">Battleship</span> -->
+  <!--   <nav class="mdl-navigation"> -->
+  <!--     <a class="mdl-navigation__link" href="">About</a> -->
+  <!--     <a class="mdl-navigation__link" href="">Players</a> -->
+  <!--     <a class="mdl-navigation__link" href="">Games</a> -->
+  <!--     <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship" class="mdl-badge">Github</a> -->
+  <!--   </nav> -->
+  <!-- </div> -->
+  <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+
+    
+      <div class="about-ribbon"></div>
+      <main class="about-main mdl-layout__content">
+        <div class="about-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="about-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="about-crumbs mdl-color-text--grey-500">
+              About Battleship
+            </div>
+            <h3>Battleship Tournament</h3>
+
+<p>A dirt simple <a href="https://en.wikipedia.org/wiki/Battleship_(game)">battleship</a> tournament engine.</p>
+
+<p>The engine expects the processes to communicate over a socket.
+When the engine runs your process, it will send a single 
+command line argument, which is the port on which you should connect
+to.</p>
+
+<p>At that point, the engine will randomly determine who goes first,
+and send each program a message on stdin,</p>
+
+<pre>
+0, opponent_name\n
+</pre>
+
+<p>where the first character tells whether you go first (0) or second (1),
+and the second string is your opponents name.</p>
+
+<p>Each binary must then report an ascii representation of a 10x10 game board
+with: </p>
+
+<pre>
+A for the aircraft carrier (length 5),
+B for a battle ship (length 4)
+S for a submarine (length 3)
+D for a destroyer (length 3)
+P for a patrol boat (length 2)
+0 for an empty square
+</pre>
+
+<p>
+for example, an example board would be:
+</p>
+
+<pre>
+0000000000\n
+00000000PP\n
+00B0000000\n
+00B000A000\n
+00B000ASSS\n
+00BDDDA000\n
+000000A000\n
+000000A000\n
+0000000000\n
+0000000000\n
+</pre>
+
+<p>At that point, if it is your turn, you must report your guess
+as a comma separated tuple, 0-indexed, e.g.</p>
+
+<pre>
+0, 5\n
+</pre>
+
+<p>The engine will report back on the socket, either <tt>H\n</tt> if a hit,
+<tt>M\n</tt> if a miss, <tt>SX\n</tt> if you sunk a ship, where X is one of the 
+boat characters above, and <tt>W\n</tt> if you won the game.</p>
+
+<p>If it is not your turn, the engine will notify you of 
+your opponents guess in the form a comma separated tuple</p>
+
+<pre>
+0, 5\n
+</pre>
+
+<p>or, if you just lost, you will recieve a single <tt>L\n</tt>:</p>
+
+<h3>Requirements</h3>
+
+<p>if you are running this locally, it uses the following external packages:</p>
+    
+<ul>
+ <li> <a href="https://pypi.python.org/pypi/futures">futures</a>  (e.g. <tt>pip install futures</tt>)</li>
+ <li> <a href="https://pypi.python.org/pypi/trueskill/0.4.3">trueskill</a> - if you want to generate rankings</li>
+ <li> <a href="http://jinja.pocoo.org/docs/dev/">jinja2</a> - if you want to generate the webpages</li>
+</ul>
+
+          </div>
+        </div>
+
+
+  </div>
+  </main>
+</div>
+
+</body>
+</html>
