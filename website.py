@@ -24,6 +24,7 @@ env = Environment(loader=FileSystemLoader(TEMPLATES_PATH))
 leaderboard_row = namedtuple('row', 'rank name exposure mean sigma wins losses')
 
 def collect_errors():
+    logging.info("Collecting errored games")
     records = glob.glob(os.path.join(RESULTS_PATH, "*.json")) 
     errors = defaultdict(list)
     for fl in records:
@@ -36,6 +37,7 @@ def collect_errors():
             errors[badguy].append(dat.get("id"))  # TODO temporary fix since I didn't have ids
     return errors
 
+errors = collect_errors()
 
 def make_index():
     """ Make the index page, which has the leaderboard """
@@ -43,11 +45,8 @@ def make_index():
     with open("leaderboard.txt","r") as f:
         data = f.readlines()[2:]
     leaderboard = [ leaderboard_row(*line.split()) for line in data ]    
-    errors = collect_errors()
     with open(os.path.join(STATIC_PATH, "index.html"), "w") as f:
         f.write(template.render(leaderboard=leaderboard, errors=errors, title="Battleship Leaderboard"))
-
-    
 
 def make_games():
     """ Make the page for each game, as well as the games overview page """
@@ -57,10 +56,24 @@ def make_players():
 
 def make_about():
     """ make the about page """
+    logging.info("Making the about page")
+    template = env.get_template("about.html")
+    with open(os.path.join(STATIC_PATH, "about.html"), "w") as f:
+        f.write(template.render(title="About"))
 
 def copy_css():
+    logging.info("Copying the css file")
     shutil.copyfile(os.path.join(TEMPLATES_PATH, CUSTOM_CSS),
             os.path.join(STATIC_PATH, CUSTOM_CSS))
+
+def copy_records():
+    logging.info("Copying over the records")
+    static_records = os.path.join(STATIC_PATH, "records")
+    try:
+        shutil.rmtree(static_records)
+    except OSError:
+        pass
+    shutil.copytree(RESULTS_PATH, static_records)
 
 def make_website():
     logging.debug("making the whole website")
@@ -69,6 +82,7 @@ def make_website():
     make_players()
     make_about()
     copy_css()
+    copy_records()
 
 
 if __name__ == "__main__":
