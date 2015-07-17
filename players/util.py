@@ -8,8 +8,6 @@ import os
 import sys
 from random import randrange
 
-BUFFER = 2048
-
 ship_sizes = {"A": 5, "B": 4, "D": 3, "S": 3, "P": 2}
 
 def board_str(board):
@@ -82,7 +80,7 @@ class LocalCommunication(object):
         return msg
 
     def sendline(self,msg):
-        print msg
+        print(msg)
 
 class Communication(object):
     """ A simple communication wrapper, use
@@ -100,7 +98,7 @@ class Communication(object):
         self.server_address = ('localhost', self.port)
         logging.debug("Connection to %r", self.server_address)
         self.sock.connect(self.server_address)
-        self.sock_file = self.sock.makefile("+", bufsize=BUFFER)
+        self.sock_file = self.sock.makefile("rw")
         logging.debug("Connected")
 
     def readline(self):

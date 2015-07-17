@@ -75,7 +75,7 @@ import logging
 logging.basicConfig(filename='logs/battleship.log',level=logging.DEBUG)
 
 ROOT = os.path.realpath(os.path.dirname(__file__))
-WORKERS = 10
+WORKERS = 2
 DEFAULTN = 25
 BUFFER = 2056
 PLAYERPATH = 'players'
