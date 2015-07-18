@@ -590,7 +590,7 @@ parser.add_argument("--battle", '-b', nargs=2, help="Run a game between two prog
 parser.add_argument("-n", nargs='?', default=0, type=int, help="The number of games to run")
 parser.add_argument("--json","-j", action='store_true', help="Save json output")
 parser.add_argument("--workers", "-w", default=WORKERS, help="Number of processes to use")
-parser.add_argument("--timeout", default=TIMEOUT, help="Timeout for each action")
+parser.add_argument("--timeout", type=int, default=TIMEOUT, help="Timeout for each action")
 parser.add_argument("--verbose", '-v', default=0, action='count', help="Verbosity for logs")
 parser.add_argument("--records", '-r', default=RECORDPATH, help="Path to records")
 parser.add_argument("--playerpath", '-p', default=PLAYERPATH, help="Path to players")
