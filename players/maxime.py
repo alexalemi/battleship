@@ -4,10 +4,12 @@ import random
 import socket
 import sys
 import math
+import time
 
 
 SHIP_LENGTH = {'A': 5, 'B': 4, 'S': 3, 'D': 3, 'P': 2}
 ALL_POSITIONS = tuple((i, j) for i in range(10) for j in range(10))
+TIMEOUT = 2.0
 
 
 class Game:
@@ -111,6 +113,14 @@ def all_ship_positions(length, condition):
             yield set((i, j + k) for k in range(length))
 
 
+def is_intersection_null(left, right):
+    for pos in left:
+        if pos in right:
+            return False
+
+    return True
+
+
 class Player:
     def init(self, myturn, opponent):
         logging.info('[init] The game starts!')
@@ -139,18 +149,18 @@ class Player:
 
     # generate our board
     def board(self):
-        return ['0000000000',
-                '00000000PP',
-                '00B0000000',
-                '00B000A000',
-                '00B000ASSS',
-                '00BDDDA000',
-                '000000A000',
-                '000000A000',
-                '0000000000',
-                '0000000000']
+        board = {pos: '0' for pos in ALL_POSITIONS}
+
+        for ship, length in SHIP_LENGTH.items():
+            positions = list(all_ship_positions(length, lambda p: board[p] == '0'))
+            points = random.choice(positions)
+            for pos in points:
+                board[pos] = ship
+
+        return [[board[i, j] for j in range(10)] for i in range(10)]
 
     def guess(self):
+        self._start_time = time.time()
         return self.guess_target_mode() or self.guess_hunting_mode()
 
     def is_possibly_ship(self, pos):
@@ -229,14 +239,14 @@ class Player:
     def guess_hunting_mode(self):
         logging.debug('[guess] hunting mode')
         self.reset_proba_map()
-        self.fill_proba_map(7000)
+        self.fill_proba_map()
         positions = [(i, j) for i, j in ALL_POSITIONS if (i + j) % self._parity_mod == self._parity_val]
         return self.shoot(positions)
 
     def reset_proba_map(self):
         self._proba_map = {pos: 0 for pos in ALL_POSITIONS}
 
-    def fill_proba_map(self, iterations):
+    def fill_proba_map(self):
         # optimized version of fill_proba_map
         ships_possible_positions = {}
         for ship in self._ships:
@@ -247,14 +257,15 @@ class Player:
         ships_order = list(self._ships)
         ships_order.sort(key=lambda ship: len(ships_possible_positions[ship]), reverse=True)
 
-        for _ in range(iterations):
+        iterations = 0
+        while iterations < 100000 and time.time() - self._start_time < TIMEOUT - 0.1:
             ships = [] # list of ships (set of positions)
             ships_positions = set() # taken positions
 
             for ship in ships_order:
                 positions = ships_possible_positions[ship]
                 if ships: # not the first ship
-                    positions = [points for points in positions if len(points & ships_positions) == 0]
+                    positions = [points for points in positions if is_intersection_null(points, ships_possible_positions)]
                 points = random.choice(positions)
                 ships.append(points)
                 ships_positions.update(points)
@@ -262,6 +273,10 @@ class Player:
             for points in ships:
                 for pos in points:
                     self._proba_map[pos] += 1
+
+            iterations += 1
+
+        logging.debug('[fill_proba_map] %d iterations in %s secs' % (iterations, time.time() - self._start_time))
 
     def generate_random_ships(self):
         ships = [] # list of ships (set of positions)
