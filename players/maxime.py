@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env pypy3
 import logging
 import random
 import socket
@@ -118,7 +118,7 @@ class Player:
 
         # status of the opponent board
         # ' ': unknow, 'M': miss, 'H': hit, 'A', 'B', 'S', 'D', 'P': ship
-        self._board = {(i, j): ' ' for i in range(10) for j in range(10)}
+        self._board = {pos: ' ' for pos in ALL_POSITIONS}
 
         # set of guesses
         self._guesses = set()
@@ -126,14 +126,8 @@ class Player:
         # set of ships still alive
         self._ships = {'A', 'B', 'S', 'D', 'P'}
 
-        # heat map
-        self._guess_map = {(i, j): 0. for i in range(10) for j in range(10)}
-
-        for x in range(10): # increase the heat on the borders
-            self._guess_map[1, x] = self._guess_map[8, x] = 2.
-            self._guess_map[x, 1] = self._guess_map[x, 8] = 2.
-            self._guess_map[0, x] = self._guess_map[9, x] = 4.
-            self._guess_map[x, 0] = self._guess_map[x, 9] = 4.
+        # probability map
+        self.reset_proba_map()
 
         # hunting mode settings
         # we only strike if (i + j) % self._parity_mod == self._parity_value
@@ -155,12 +149,6 @@ class Player:
                 '000000A000',
                 '0000000000',
                 '0000000000']
-
-    def shoot(self, positions):
-        positions = set(positions).difference(self._guesses)
-        assert positions, 'positions is empty'
-        min_value = min(self._guess_map[pos] for pos in positions)
-        return random.choice([pos for pos in positions if abs(self._guess_map[pos] - min_value) < 1e-6])
 
     def guess(self):
         return self.guess_target_mode() or self.guess_hunting_mode()
@@ -196,6 +184,9 @@ class Player:
             for pos in positions[0]:
                 self._hits.remove(pos)
 
+            if not self._hits: # no more hits
+                self.reset_proba_map()
+
         if not self._hits:
             return None
 
@@ -207,6 +198,7 @@ class Player:
         for nearby_hit in nearby_hits:
             # grab all hits on the same line, starting from `hit`
             cluster = {hit, nearby_hit}
+            guesses = []
             direction = point_sub(nearby_hit, hit)
 
             current = point_add(nearby_hit, direction)
@@ -215,7 +207,7 @@ class Player:
                 current = point_add(current, direction)
 
             if valid_coordinate(current) and current not in self._guesses and self.is_possibly_ship(current):
-                return current
+                guesses.append(current)
 
             current = point_sub(hit, direction)
             while valid_coordinate(current) and current in self._hits:
@@ -223,10 +215,13 @@ class Player:
                 current = point_sub(current, direction)
 
             if valid_coordinate(current) and current not in self._guesses and self.is_possibly_ship(current):
-                return current
+                guesses.append(current)
 
             # found a cluster
             logging.debug('[target] found cluster: %r' % cluster)
+
+            if guesses:
+                return self.shoot(guesses)
 
         # no nearby hits
         logging.debug('[target] no nearby hits, shooting nearby')
@@ -236,8 +231,36 @@ class Player:
 
     def guess_hunting_mode(self):
         logging.debug('[guess] hunting mode')
+        self.fill_proba_map(800)
         positions = [(i, j) for i, j in ALL_POSITIONS if (i + j) % self._parity_mod == self._parity_val]
         return self.shoot(positions)
+
+    def reset_proba_map(self):
+        self._proba_map = {pos: 0 for pos in ALL_POSITIONS}
+
+    def fill_proba_map(self, iterations):
+        for _ in range(iterations):
+            ships = self.generate_random_ships()
+            for points in ships:
+                for pos in points:
+                    self._proba_map[pos] += 1
+
+    def generate_random_ships(self):
+        ships = [] # list of ships (set of positions)
+        ships_positions = set() # taken positions
+
+        for ship in self._ships:
+            length = SHIP_LENGTH[ship]
+            positions = all_ship_positions(length, lambda p: self._board[p] == ' ' and p not in ships_positions)
+            points = random.choice(list(positions))
+            ships.append(points)
+            ships_positions.update(points)
+
+        return ships
+
+    def shoot(self, positions):
+        positions = set(positions).difference(self._guesses)
+        return max(positions, key=lambda p: self._proba_map[p])
 
     def result(self, guess, data):
         # update opponent board
@@ -253,10 +276,6 @@ class Player:
         if data[0] == 'S':
             self._ships.remove(data[1])
 
-        # update the guess map
-        for pos in nearby_coordinates(guess, 1):
-            self._guess_map[pos] += 2.0 - distance(guess, pos)
-
         # update hunting mode settings
         if data[0] == 'S':
             min_length = min(SHIP_LENGTH[ship] for ship in self._ships)
@@ -271,7 +290,6 @@ class Player:
 
         # debug
         self._print_board()
-        #self._print_guess_map()
 
     def opponent_guess(self, guess):
         pass
@@ -288,13 +306,6 @@ class Player:
         for i in range(10):
             logging.debug('#' + ''.join(self._board[i, j] for j in range(10)) + '#')
         logging.debug('#' * 12)
-
-    def _print_guess_map(self):
-        logging.debug('guess map:')
-        logging.debug('#' * 52)
-        for i in range(10):
-            logging.debug('#' + ''.join('%.2f ' % self._guess_map[i, j] for j in range(10)) + '#')
-        logging.debug('#' * 52)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
