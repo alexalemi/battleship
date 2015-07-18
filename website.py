@@ -64,8 +64,10 @@ def make_games():
     template = env.get_template("game.html")
     for game in games:
         logging.info("Making game page for pk=%d", game)
+        with open(os.path.join(RESULTS_PATH, "{}.json".format(game))) as f:
+            data = json.load(f)
         with open(os.path.join(STATIC_PATH, "{}.html".format(game)), 'w') as f:
-            f.write(template.render(pk=game))
+            f.write(template.render(pk=game, data=data))
 
 def make_players():
     """ Make the page for all the players, and each player individually """

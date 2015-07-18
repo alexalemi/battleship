@@ -1,1284 +1,879 @@
 {
-    "player1": "hunter.py", 
+    "player1": "hunter_parity.py", 
     "turns": [
         {
-            "guess": "4,6\n", 
-            "elapsed": 0.004151105880737305, 
+            "guess": "1,8\n", 
+            "elapsed": 0.0021200180053710938, 
             "turnnum": 1, 
-            "notify": "4,6\n", 
-            "starttime": 1437255420.348866, 
+            "notify": "1,8\n", 
+            "starttime": 1437258220.578371, 
             "active": 0, 
             "response": "M"
         }, 
         {
-            "guess": "9,5\n", 
-            "elapsed": 0.004208087921142578, 
+            "guess": "2,4\n", 
+            "elapsed": 0.00368499755859375, 
             "turnnum": 2, 
-            "notify": "9,5\n", 
-            "starttime": 1437255420.353025, 
+            "notify": "2,4\n", 
+            "starttime": 1437258220.580498, 
             "active": 1, 
             "response": "M"
         }, 
         {
-            "guess": "5,1\n", 
-            "elapsed": 0.04346418380737305, 
+            "guess": "0,0\n", 
+            "elapsed": 0.04174208641052246, 
             "turnnum": 3, 
-            "notify": "5,1\n", 
-            "starttime": 1437255420.357241, 
+            "notify": "0,0\n", 
+            "starttime": 1437258220.584189, 
             "active": 0, 
             "response": "M"
         }, 
         {
-            "guess": "3,2\n", 
-            "elapsed": 0.0077362060546875, 
+            "guess": "7,7\n", 
+            "elapsed": 0.006360054016113281, 
             "turnnum": 4, 
-            "notify": "3,2\n", 
-            "starttime": 1437255420.40072, 
+            "notify": "7,7\n", 
+            "starttime": 1437258220.625947, 
             "active": 1, 
             "response": "M"
         }, 
         {
-            "guess": "8,2\n", 
-            "elapsed": 0.033120155334472656, 
+            "guess": "8,8\n", 
+            "elapsed": 0.03823494911193848, 
             "turnnum": 5, 
-            "notify": "8,2\n", 
-            "starttime": 1437255420.408465, 
+            "notify": "8,8\n", 
+            "starttime": 1437258220.632317, 
             "active": 0, 
             "response": "M"
         }, 
         {
-            "guess": "0,7\n", 
-            "elapsed": 0.013292074203491211, 
+            "guess": "4,8\n", 
+            "elapsed": 0.007992029190063477, 
             "turnnum": 6, 
-            "notify": "0,7\n", 
-            "starttime": 1437255420.441598, 
+            "notify": "4,8\n", 
+            "starttime": 1437258220.670569, 
             "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "2,0\n", 
-            "elapsed": 0.03189897537231445, 
-            "turnnum": 7, 
-            "notify": "2,0\n", 
-            "starttime": 1437255420.454919, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,4\n", 
-            "elapsed": 0.011275053024291992, 
-            "turnnum": 8, 
-            "notify": "9,4\n", 
-            "starttime": 1437255420.486834, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,9\n", 
-            "elapsed": 0.03550910949707031, 
-            "turnnum": 9, 
-            "notify": "5,9\n", 
-            "starttime": 1437255420.498123, 
-            "active": 0, 
             "response": "M"
         }, 
         {
             "guess": "4,4\n", 
-            "elapsed": 0.01966404914855957, 
-            "turnnum": 10, 
+            "elapsed": 0.03366708755493164, 
+            "turnnum": 7, 
             "notify": "4,4\n", 
-            "starttime": 1437255420.533648, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "2,4\n", 
-            "elapsed": 0.04780697822570801, 
-            "turnnum": 11, 
-            "notify": "2,4\n", 
-            "starttime": 1437255420.553323, 
+            "starttime": 1437258220.678571, 
             "active": 0, 
             "response": "M"
         }, 
         {
-            "guess": "5,3\n", 
-            "elapsed": 0.014106035232543945, 
-            "turnnum": 12, 
-            "notify": "5,3\n", 
-            "starttime": 1437255420.601152, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,9\n", 
-            "elapsed": 0.023555994033813477, 
-            "turnnum": 13, 
-            "notify": "9,9\n", 
-            "starttime": 1437255420.61527, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "2,8\n", 
-            "elapsed": 0.017629146575927734, 
-            "turnnum": 14, 
-            "notify": "2,8\n", 
-            "starttime": 1437255420.638856, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "3,5\n", 
-            "elapsed": 0.024811983108520508, 
-            "turnnum": 15, 
-            "notify": "3,5\n", 
-            "starttime": 1437255420.656498, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "2,4\n", 
-            "elapsed": 0.013987064361572266, 
-            "turnnum": 16, 
-            "notify": "2,4\n", 
-            "starttime": 1437255420.68132, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "2,8\n", 
-            "elapsed": 0.029079914093017578, 
-            "turnnum": 17, 
-            "notify": "2,8\n", 
-            "starttime": 1437255420.695316, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,3\n", 
-            "elapsed": 0.01572394371032715, 
-            "turnnum": 18, 
-            "notify": "0,3\n", 
-            "starttime": 1437255420.724406, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,5\n", 
-            "elapsed": 0.03379201889038086, 
-            "turnnum": 19, 
-            "notify": "7,5\n", 
-            "starttime": 1437255420.740148, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,8\n", 
-            "elapsed": 0.011130094528198242, 
-            "turnnum": 20, 
-            "notify": "5,8\n", 
-            "starttime": 1437255420.773949, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "7,7\n", 
-            "elapsed": 0.034757137298583984, 
-            "turnnum": 21, 
-            "notify": "7,7\n", 
-            "starttime": 1437255420.785091, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,7\n", 
-            "elapsed": 0.0099029541015625, 
-            "turnnum": 22, 
-            "notify": "5,7\n", 
-            "starttime": 1437255420.819859, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,1\n", 
-            "elapsed": 0.03368091583251953, 
-            "turnnum": 23, 
-            "notify": "9,1\n", 
-            "starttime": 1437255420.829772, 
-            "active": 0, 
-            "response": "H"
-        }, 
-        {
-            "guess": "6,8\n", 
-            "elapsed": 0.01572895050048828, 
-            "turnnum": 24, 
-            "notify": "6,8\n", 
-            "starttime": 1437255420.863466, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "9,0\n", 
-            "elapsed": 0.02618098258972168, 
-            "turnnum": 25, 
-            "notify": "9,0\n", 
-            "starttime": 1437255420.879208, 
-            "active": 0, 
-            "response": "H"
-        }, 
-        {
-            "guess": "6,7\n", 
-            "elapsed": 0.015106916427612305, 
-            "turnnum": 26, 
-            "notify": "6,7\n", 
-            "starttime": 1437255420.905399, 
+            "guess": "7,9\n", 
+            "elapsed": 0.009646892547607422, 
+            "turnnum": 8, 
+            "notify": "7,9\n", 
+            "starttime": 1437258220.712248, 
             "active": 1, 
             "response": "M"
         }, 
         {
             "guess": "8,0\n", 
-            "elapsed": 0.02628302574157715, 
-            "turnnum": 27, 
+            "elapsed": 0.03598308563232422, 
+            "turnnum": 9, 
             "notify": "8,0\n", 
-            "starttime": 1437255420.920517, 
+            "starttime": 1437258220.721907, 
             "active": 0, 
             "response": "M"
         }, 
         {
-            "guess": "6,9\n", 
-            "elapsed": 0.01904892921447754, 
-            "turnnum": 28, 
-            "notify": "6,9\n", 
-            "starttime": 1437255420.94681, 
+            "guess": "0,2\n", 
+            "elapsed": 0.007166147232055664, 
+            "turnnum": 10, 
+            "notify": "0,2\n", 
+            "starttime": 1437258220.757906, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "6,1\n", 
+            "elapsed": 0.03639388084411621, 
+            "turnnum": 11, 
+            "notify": "6,1\n", 
+            "starttime": 1437258220.765084, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "2,0\n", 
+            "elapsed": 0.008208990097045898, 
+            "turnnum": 12, 
+            "notify": "2,0\n", 
+            "starttime": 1437258220.801487, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "3,7\n", 
+            "elapsed": 0.03711295127868652, 
+            "turnnum": 13, 
+            "notify": "3,7\n", 
+            "starttime": 1437258220.809708, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "4,2\n", 
+            "elapsed": 0.005738019943237305, 
+            "turnnum": 14, 
+            "notify": "4,2\n", 
+            "starttime": 1437258220.84694, 
             "active": 1, 
             "response": "H"
         }, 
         {
-            "guess": "9,2\n", 
-            "elapsed": 0.021863937377929688, 
-            "turnnum": 29, 
-            "notify": "9,2\n", 
-            "starttime": 1437255420.965873, 
+            "guess": "5,3\n", 
+            "elapsed": 0.03720498085021973, 
+            "turnnum": 15, 
+            "notify": "5,3\n", 
+            "starttime": 1437258220.852689, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "4,3\n", 
+            "elapsed": 0.006433963775634766, 
+            "turnnum": 16, 
+            "notify": "4,3\n", 
+            "starttime": 1437258220.889909, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "2,4\n", 
+            "elapsed": 0.03798794746398926, 
+            "turnnum": 17, 
+            "notify": "2,4\n", 
+            "starttime": 1437258220.896357, 
             "active": 0, 
             "response": "H"
         }, 
         {
-            "guess": "5,9\n", 
-            "elapsed": 0.02054619789123535, 
-            "turnnum": 30, 
-            "notify": "5,9\n", 
-            "starttime": 1437255420.987748, 
+            "guess": "5,2\n", 
+            "elapsed": 0.008027076721191406, 
+            "turnnum": 18, 
+            "notify": "5,2\n", 
+            "starttime": 1437258220.934363, 
             "active": 1, 
             "response": "H"
         }, 
         {
-            "guess": "8,1\n", 
-            "elapsed": 0.025794029235839844, 
-            "turnnum": 31, 
-            "notify": "8,1\n", 
-            "starttime": 1437255421.008303, 
+            "guess": "1,4\n", 
+            "elapsed": 0.03606104850769043, 
+            "turnnum": 19, 
+            "notify": "1,4\n", 
+            "starttime": 1437258220.942404, 
             "active": 0, 
             "response": "M"
         }, 
         {
-            "guess": "4,9\n", 
-            "elapsed": 0.017397165298461914, 
-            "turnnum": 32, 
-            "notify": "4,9\n", 
-            "starttime": 1437255421.034108, 
-            "active": 1, 
-            "response": "SS"
-        }, 
-        {
-            "guess": "9,3\n", 
-            "elapsed": 0.022949934005737305, 
-            "turnnum": 33, 
-            "notify": "9,3\n", 
-            "starttime": 1437255421.051516, 
-            "active": 0, 
-            "response": "H"
-        }, 
-        {
-            "guess": "7,8\n", 
-            "elapsed": 0.022290945053100586, 
-            "turnnum": 34, 
-            "notify": "7,8\n", 
-            "starttime": 1437255421.074472, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,3\n", 
-            "elapsed": 0.018527984619140625, 
-            "turnnum": 35, 
-            "notify": "8,3\n", 
-            "starttime": 1437255421.096772, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "4,8\n", 
-            "elapsed": 0.028443098068237305, 
-            "turnnum": 36, 
-            "notify": "4,8\n", 
-            "starttime": 1437255421.115314, 
-            "active": 1, 
-            "response": "SD"
-        }, 
-        {
-            "guess": "9,4\n", 
-            "elapsed": 0.011063814163208008, 
-            "turnnum": 37, 
-            "notify": "9,4\n", 
-            "starttime": 1437255421.143768, 
-            "active": 0, 
-            "response": "SA"
-        }, 
-        {
-            "guess": "4,7\n", 
-            "elapsed": 0.03202486038208008, 
-            "turnnum": 38, 
-            "notify": "4,7\n", 
-            "starttime": 1437255421.154858, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,5\n", 
-            "elapsed": 0.014872074127197266, 
-            "turnnum": 39, 
-            "notify": "9,5\n", 
-            "starttime": 1437255421.186903, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "3,8\n", 
-            "elapsed": 0.025913000106811523, 
-            "turnnum": 40, 
-            "notify": "3,8\n", 
-            "starttime": 1437255421.201785, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,4\n", 
-            "elapsed": 0.020033836364746094, 
-            "turnnum": 41, 
-            "notify": "8,4\n", 
-            "starttime": 1437255421.227709, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,9\n", 
-            "elapsed": 0.02385711669921875, 
-            "turnnum": 42, 
-            "notify": "7,9\n", 
-            "starttime": 1437255421.247753, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,7\n", 
-            "elapsed": 0.020354032516479492, 
-            "turnnum": 43, 
-            "notify": "9,7\n", 
-            "starttime": 1437255421.271623, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,9\n", 
-            "elapsed": 0.019668102264404297, 
-            "turnnum": 44, 
-            "notify": "5,9\n", 
-            "starttime": 1437255421.291987, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "1,9\n", 
-            "elapsed": 0.025696992874145508, 
-            "turnnum": 45, 
-            "notify": "1,9\n", 
-            "starttime": 1437255421.311665, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "3,9\n", 
-            "elapsed": 0.021564960479736328, 
-            "turnnum": 46, 
-            "notify": "3,9\n", 
-            "starttime": 1437255421.337372, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "2,6\n", 
-            "elapsed": 0.02065110206604004, 
-            "turnnum": 47, 
-            "notify": "2,6\n", 
-            "starttime": 1437255421.358948, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "4,8\n", 
-            "elapsed": 0.022068023681640625, 
-            "turnnum": 48, 
-            "notify": "4,8\n", 
-            "starttime": 1437255421.379607, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "6,8\n", 
-            "elapsed": 0.02234482765197754, 
-            "turnnum": 49, 
-            "notify": "6,8\n", 
-            "starttime": 1437255421.401683, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,5\n", 
-            "elapsed": 0.018957138061523438, 
-            "turnnum": 50, 
-            "notify": "0,5\n", 
-            "starttime": 1437255421.424039, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,9\n", 
-            "elapsed": 0.02560901641845703, 
-            "turnnum": 51, 
-            "notify": "7,9\n", 
-            "starttime": 1437255421.443004, 
-            "active": 0, 
-            "response": "H"
-        }, 
-        {
-            "guess": "6,3\n", 
-            "elapsed": 0.02005910873413086, 
-            "turnnum": 52, 
-            "notify": "6,3\n", 
-            "starttime": 1437255421.468622, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "7,8\n", 
-            "elapsed": 0.025664806365966797, 
-            "turnnum": 53, 
-            "notify": "7,8\n", 
-            "starttime": 1437255421.488691, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,3\n", 
-            "elapsed": 0.01653909683227539, 
-            "turnnum": 54, 
-            "notify": "7,3\n", 
-            "starttime": 1437255421.514375, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,9\n", 
-            "elapsed": 0.024283170700073242, 
-            "turnnum": 55, 
-            "notify": "8,9\n", 
-            "starttime": 1437255421.530923, 
-            "active": 0, 
-            "response": "SP"
-        }, 
-        {
-            "guess": "6,4\n", 
-            "elapsed": 0.01561117172241211, 
-            "turnnum": 56, 
-            "notify": "6,4\n", 
-            "starttime": 1437255421.555215, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "8,8\n", 
-            "elapsed": 0.024715900421142578, 
-            "turnnum": 57, 
-            "notify": "8,8\n", 
-            "starttime": 1437255421.570903, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,4\n", 
-            "elapsed": 0.017520904541015625, 
-            "turnnum": 58, 
-            "notify": "7,4\n", 
-            "starttime": 1437255421.595629, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "6,9\n", 
-            "elapsed": 0.025968074798583984, 
-            "turnnum": 59, 
-            "notify": "6,9\n", 
-            "starttime": 1437255421.61316, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "6,5\n", 
-            "elapsed": 0.017065048217773438, 
-            "turnnum": 60, 
-            "notify": "6,5\n", 
-            "starttime": 1437255421.63914, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,3\n", 
-            "elapsed": 0.023951053619384766, 
-            "turnnum": 61, 
-            "notify": "1,3\n", 
-            "starttime": 1437255421.656214, 
-            "active": 0, 
-            "response": "H"
-        }, 
-        {
-            "guess": "5,4\n", 
-            "elapsed": 0.01979994773864746, 
-            "turnnum": 62, 
-            "notify": "5,4\n", 
-            "starttime": 1437255421.680172, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,3\n", 
-            "elapsed": 0.02273106575012207, 
-            "turnnum": 63, 
-            "notify": "0,3\n", 
-            "starttime": 1437255421.699982, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "6,2\n", 
-            "elapsed": 0.019412994384765625, 
-            "turnnum": 64, 
-            "notify": "6,2\n", 
-            "starttime": 1437255421.722719, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "1,2\n", 
-            "elapsed": 0.0216372013092041, 
-            "turnnum": 65, 
-            "notify": "1,2\n", 
-            "starttime": 1437255421.742138, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,2\n", 
-            "elapsed": 0.020673036575317383, 
-            "turnnum": 66, 
-            "notify": "7,2\n", 
-            "starttime": 1437255421.763785, 
+            "guess": "5,3\n", 
+            "elapsed": 0.006201028823852539, 
+            "turnnum": 20, 
+            "notify": "5,3\n", 
+            "starttime": 1437258220.978483, 
             "active": 1, 
             "response": "M"
         }, 
         {
             "guess": "2,3\n", 
-            "elapsed": 0.023862123489379883, 
-            "turnnum": 67, 
+            "elapsed": 0.037283897399902344, 
+            "turnnum": 21, 
             "notify": "2,3\n", 
-            "starttime": 1437255421.784468, 
+            "starttime": 1437258220.984694, 
             "active": 0, 
             "response": "H"
         }, 
         {
-            "guess": "6,1\n", 
-            "elapsed": 0.02100086212158203, 
-            "turnnum": 68, 
-            "notify": "6,1\n", 
-            "starttime": 1437255421.80834, 
+            "guess": "6,2\n", 
+            "elapsed": 0.0075910091400146484, 
+            "turnnum": 22, 
+            "notify": "6,2\n", 
+            "starttime": 1437258221.021997, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "1,3\n", 
+            "elapsed": 0.04066610336303711, 
+            "turnnum": 23, 
+            "notify": "1,3\n", 
+            "starttime": 1437258221.029598, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "4,1\n", 
+            "elapsed": 0.005956172943115234, 
+            "turnnum": 24, 
+            "notify": "4,1\n", 
+            "starttime": 1437258221.070279, 
             "active": 1, 
             "response": "H"
         }, 
         {
             "guess": "2,2\n", 
-            "elapsed": 0.02198314666748047, 
-            "turnnum": 69, 
+            "elapsed": 0.033041954040527344, 
+            "turnnum": 25, 
             "notify": "2,2\n", 
-            "starttime": 1437255421.829351, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,1\n", 
-            "elapsed": 0.0199739933013916, 
-            "turnnum": 70, 
-            "notify": "7,1\n", 
-            "starttime": 1437255421.851342, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,4\n", 
-            "elapsed": 0.02063298225402832, 
-            "turnnum": 71, 
-            "notify": "1,4\n", 
-            "starttime": 1437255421.871321, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,1\n", 
-            "elapsed": 0.024178028106689453, 
-            "turnnum": 72, 
-            "notify": "5,1\n", 
-            "starttime": 1437255421.891963, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "3,3\n", 
-            "elapsed": 0.020507097244262695, 
-            "turnnum": 73, 
-            "notify": "3,3\n", 
-            "starttime": 1437255421.916148, 
-            "active": 0, 
-            "response": "SD"
-        }, 
-        {
-            "guess": "5,2\n", 
-            "elapsed": 0.023469924926757812, 
-            "turnnum": 74, 
-            "notify": "5,2\n", 
-            "starttime": 1437255421.936664, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "3,2\n", 
-            "elapsed": 0.021358966827392578, 
-            "turnnum": 75, 
-            "notify": "3,2\n", 
-            "starttime": 1437255421.960153, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "6,0\n", 
-            "elapsed": 0.02244400978088379, 
-            "turnnum": 76, 
-            "notify": "6,0\n", 
-            "starttime": 1437255421.981521, 
-            "active": 1, 
-            "response": "SA"
-        }, 
-        {
-            "guess": "3,4\n", 
-            "elapsed": 0.018265962600708008, 
-            "turnnum": 77, 
-            "notify": "3,4\n", 
-            "starttime": 1437255422.003971, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,0\n", 
-            "elapsed": 0.029714107513427734, 
-            "turnnum": 78, 
-            "notify": "7,0\n", 
-            "starttime": 1437255422.022246, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "4,3\n", 
-            "elapsed": 0.012872934341430664, 
-            "turnnum": 79, 
-            "notify": "4,3\n", 
-            "starttime": 1437255422.051969, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,0\n", 
-            "elapsed": 0.0303499698638916, 
-            "turnnum": 80, 
-            "notify": "5,0\n", 
-            "starttime": 1437255422.064851, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,5\n", 
-            "elapsed": 0.011784076690673828, 
-            "turnnum": 81, 
-            "notify": "5,5\n", 
-            "starttime": 1437255422.095211, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "3,7\n", 
-            "elapsed": 0.0288388729095459, 
-            "turnnum": 82, 
-            "notify": "3,7\n", 
-            "starttime": 1437255422.107001, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,0\n", 
-            "elapsed": 0.01214599609375, 
-            "turnnum": 83, 
-            "notify": "0,0\n", 
-            "starttime": 1437255422.135847, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,1\n", 
-            "elapsed": 0.0312349796295166, 
-            "turnnum": 84, 
-            "notify": "1,1\n", 
-            "starttime": 1437255422.148003, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,1\n", 
-            "elapsed": 0.011353015899658203, 
-            "turnnum": 85, 
-            "notify": "7,1\n", 
-            "starttime": 1437255422.179245, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "4,0\n", 
-            "elapsed": 0.03796100616455078, 
-            "turnnum": 86, 
-            "notify": "4,0\n", 
-            "starttime": 1437255422.190607, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "4,2\n", 
-            "elapsed": 0.00563502311706543, 
-            "turnnum": 87, 
-            "notify": "4,2\n", 
-            "starttime": 1437255422.228578, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,0\n", 
-            "elapsed": 0.03578805923461914, 
-            "turnnum": 88, 
-            "notify": "8,0\n", 
-            "starttime": 1437255422.234222, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,2\n", 
-            "elapsed": 0.0051958560943603516, 
-            "turnnum": 89, 
-            "notify": "0,2\n", 
-            "starttime": 1437255422.270019, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,1\n", 
-            "elapsed": 0.038465023040771484, 
-            "turnnum": 90, 
-            "notify": "0,1\n", 
-            "starttime": 1437255422.275228, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "4,4\n", 
-            "elapsed": 0.0057408809661865234, 
-            "turnnum": 91, 
-            "notify": "4,4\n", 
-            "starttime": 1437255422.313707, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,4\n", 
-            "elapsed": 0.04214000701904297, 
-            "turnnum": 92, 
-            "notify": "1,4\n", 
-            "starttime": 1437255422.319458, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,3\n", 
-            "elapsed": 0.0037300586700439453, 
-            "turnnum": 93, 
-            "notify": "5,3\n", 
-            "starttime": 1437255422.361611, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,8\n", 
-            "elapsed": 0.0400540828704834, 
-            "turnnum": 94, 
-            "notify": "0,8\n", 
-            "starttime": 1437255422.36535, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,1\n", 
-            "elapsed": 0.005986928939819336, 
-            "turnnum": 95, 
-            "notify": "1,1\n", 
-            "starttime": 1437255422.405415, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "2,3\n", 
-            "elapsed": 0.03333401679992676, 
-            "turnnum": 96, 
-            "notify": "2,3\n", 
-            "starttime": 1437255422.41141, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,8\n", 
-            "elapsed": 0.007997989654541016, 
-            "turnnum": 97, 
-            "notify": "0,8\n", 
-            "starttime": 1437255422.444895, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,5\n", 
-            "elapsed": 0.03546500205993652, 
-            "turnnum": 98, 
-            "notify": "8,5\n", 
-            "starttime": 1437255422.452903, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,7\n", 
-            "elapsed": 0.008105039596557617, 
-            "turnnum": 99, 
-            "notify": "1,7\n", 
-            "starttime": 1437255422.488378, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,2\n", 
-            "elapsed": 0.03917193412780762, 
-            "turnnum": 100, 
-            "notify": "0,2\n", 
-            "starttime": 1437255422.496493, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,4\n", 
-            "elapsed": 0.0048940181732177734, 
-            "turnnum": 101, 
-            "notify": "0,4\n", 
-            "starttime": 1437255422.535673, 
-            "active": 0, 
-            "response": "H"
-        }, 
-        {
-            "guess": "3,5\n", 
-            "elapsed": 0.04217100143432617, 
-            "turnnum": 102, 
-            "notify": "3,5\n", 
-            "starttime": 1437255422.540575, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,5\n", 
-            "elapsed": 0.005059957504272461, 
-            "turnnum": 103, 
-            "notify": "0,5\n", 
-            "starttime": 1437255422.582757, 
-            "active": 0, 
-            "response": "H"
-        }, 
-        {
-            "guess": "9,2\n", 
-            "elapsed": 0.03529214859008789, 
-            "turnnum": 104, 
-            "notify": "9,2\n", 
-            "starttime": 1437255422.587823, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,5\n", 
-            "elapsed": 0.007683992385864258, 
-            "turnnum": 105, 
-            "notify": "1,5\n", 
-            "starttime": 1437255422.623122, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,5\n", 
-            "elapsed": 0.03314399719238281, 
-            "turnnum": 106, 
-            "notify": "1,5\n", 
-            "starttime": 1437255422.630811, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,6\n", 
-            "elapsed": 0.005805015563964844, 
-            "turnnum": 107, 
-            "notify": "0,6\n", 
-            "starttime": 1437255422.663962, 
-            "active": 0, 
-            "response": "SS"
-        }, 
-        {
-            "guess": "0,0\n", 
-            "elapsed": 0.03690195083618164, 
-            "turnnum": 108, 
-            "notify": "0,0\n", 
-            "starttime": 1437255422.669773, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,6\n", 
-            "elapsed": 0.0036301612854003906, 
-            "turnnum": 109, 
-            "notify": "1,6\n", 
-            "starttime": 1437255422.706683, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,4\n", 
-            "elapsed": 0.03907203674316406, 
-            "turnnum": 110, 
-            "notify": "0,4\n", 
-            "starttime": 1437255422.71032, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "0,7\n", 
-            "elapsed": 0.0021839141845703125, 
-            "turnnum": 111, 
-            "notify": "0,7\n", 
-            "starttime": 1437255422.749398, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,0\n", 
-            "elapsed": 0.04011201858520508, 
-            "turnnum": 112, 
-            "notify": "9,0\n", 
-            "starttime": 1437255422.751589, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "6,2\n", 
-            "elapsed": 0.0046041011810302734, 
-            "turnnum": 113, 
-            "notify": "6,2\n", 
-            "starttime": 1437255422.79171, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,3\n", 
-            "elapsed": 0.04117584228515625, 
-            "turnnum": 114, 
-            "notify": "9,3\n", 
-            "starttime": 1437255422.796322, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "5,7\n", 
-            "elapsed": 0.002663135528564453, 
-            "turnnum": 115, 
-            "notify": "5,7\n", 
-            "starttime": 1437255422.837513, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,6\n", 
-            "elapsed": 0.052522897720336914, 
-            "turnnum": 116, 
-            "notify": "1,6\n", 
-            "starttime": 1437255422.840186, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "6,4\n", 
-            "elapsed": 0.018319129943847656, 
-            "turnnum": 117, 
-            "notify": "6,4\n", 
-            "starttime": 1437255422.892721, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,7\n", 
-            "elapsed": 0.023773908615112305, 
-            "turnnum": 118, 
-            "notify": "9,7\n", 
-            "starttime": 1437255422.911052, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "6,0\n", 
-            "elapsed": 0.01569986343383789, 
-            "turnnum": 119, 
-            "notify": "6,0\n", 
-            "starttime": 1437255422.934833, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,7\n", 
-            "elapsed": 0.030500173568725586, 
-            "turnnum": 120, 
-            "notify": "8,7\n", 
-            "starttime": 1437255422.950543, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "4,8\n", 
-            "elapsed": 0.011092185974121094, 
-            "turnnum": 121, 
-            "notify": "4,8\n", 
-            "starttime": 1437255422.981052, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "9,6\n", 
-            "elapsed": 0.03146791458129883, 
-            "turnnum": 122, 
-            "notify": "9,6\n", 
-            "starttime": 1437255422.992151, 
-            "active": 1, 
-            "response": "SP"
-        }, 
-        {
-            "guess": "4,0\n", 
-            "elapsed": 0.008219003677368164, 
-            "turnnum": 123, 
-            "notify": "4,0\n", 
-            "starttime": 1437255423.023625, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,6\n", 
-            "elapsed": 0.03857088088989258, 
-            "turnnum": 124, 
-            "notify": "8,6\n", 
-            "starttime": 1437255423.031852, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,6\n", 
-            "elapsed": 0.004603147506713867, 
-            "turnnum": 125, 
-            "notify": "8,6\n", 
-            "starttime": 1437255423.070432, 
-            "active": 0, 
-            "response": "H"
-        }, 
-        {
-            "guess": "9,8\n", 
-            "elapsed": 0.03567004203796387, 
-            "turnnum": 126, 
-            "notify": "9,8\n", 
-            "starttime": 1437255423.075047, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "8,7\n", 
-            "elapsed": 0.0049021244049072266, 
-            "turnnum": 127, 
-            "notify": "8,7\n", 
-            "starttime": 1437255423.110724, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "1,0\n", 
-            "elapsed": 0.03727602958679199, 
-            "turnnum": 128, 
-            "notify": "1,0\n", 
-            "starttime": 1437255423.115633, 
-            "active": 1, 
-            "response": "M"
-        }, 
-        {
-            "guess": "7,6\n", 
-            "elapsed": 0.007781028747558594, 
-            "turnnum": 129, 
-            "notify": "7,6\n", 
-            "starttime": 1437255423.152919, 
+            "starttime": 1437258221.076242, 
             "active": 0, 
             "response": "H"
         }, 
         {
             "guess": "3,1\n", 
-            "elapsed": 0.03603792190551758, 
-            "turnnum": 130, 
+            "elapsed": 0.011458873748779297, 
+            "turnnum": 26, 
             "notify": "3,1\n", 
-            "starttime": 1437255423.16071, 
+            "starttime": 1437258221.109297, 
             "active": 1, 
             "response": "M"
         }, 
         {
-            "guess": "6,6\n", 
-            "elapsed": 0.007030963897705078, 
-            "turnnum": 131, 
-            "notify": "6,6\n", 
-            "starttime": 1437255423.196759, 
+            "guess": "2,1\n", 
+            "elapsed": 0.03506302833557129, 
+            "turnnum": 27, 
+            "notify": "2,1\n", 
+            "starttime": 1437258221.120774, 
+            "active": 0, 
+            "response": "SB"
+        }, 
+        {
+            "guess": "5,1\n", 
+            "elapsed": 0.00981593132019043, 
+            "turnnum": 28, 
+            "notify": "5,1\n", 
+            "starttime": 1437258221.155853, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "2,0\n", 
+            "elapsed": 0.0324249267578125, 
+            "turnnum": 29, 
+            "notify": "2,0\n", 
+            "starttime": 1437258221.165682, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "5,1\n", 
+            "elapsed": 0.007668972015380859, 
+            "turnnum": 30, 
+            "notify": "5,1\n", 
+            "starttime": 1437258221.198121, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "1,1\n", 
+            "elapsed": 0.03619098663330078, 
+            "turnnum": 31, 
+            "notify": "1,1\n", 
+            "starttime": 1437258221.205805, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "5,0\n", 
+            "elapsed": 0.008357048034667969, 
+            "turnnum": 32, 
+            "notify": "5,0\n", 
+            "starttime": 1437258221.242013, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "3,3\n", 
+            "elapsed": 0.03535199165344238, 
+            "turnnum": 33, 
+            "notify": "3,3\n", 
+            "starttime": 1437258221.250388, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "4,0\n", 
+            "elapsed": 0.007627010345458984, 
+            "turnnum": 34, 
+            "notify": "4,0\n", 
+            "starttime": 1437258221.285751, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "2,5\n", 
+            "elapsed": 0.03718400001525879, 
+            "turnnum": 35, 
+            "notify": "2,5\n", 
+            "starttime": 1437258221.293391, 
             "active": 0, 
             "response": "H"
         }, 
         {
-            "guess": "2,1\n", 
-            "elapsed": 0.0405430793762207, 
-            "turnnum": 132, 
-            "notify": "2,1\n", 
-            "starttime": 1437255423.2038, 
+            "guess": "6,3\n", 
+            "elapsed": 0.0081939697265625, 
+            "turnnum": 36, 
+            "notify": "6,3\n", 
+            "starttime": 1437258221.330586, 
             "active": 1, 
             "response": "M"
         }, 
         {
-            "guess": "6,5\n", 
-            "elapsed": 0.0026438236236572266, 
-            "turnnum": 133, 
-            "notify": "6,5\n", 
-            "starttime": 1437255423.244352, 
+            "guess": "1,5\n", 
+            "elapsed": 0.03376293182373047, 
+            "turnnum": 37, 
+            "notify": "1,5\n", 
+            "starttime": 1437258221.338797, 
             "active": 0, 
             "response": "M"
         }, 
         {
-            "guess": "1,9\n", 
-            "elapsed": 0.047113895416259766, 
-            "turnnum": 134, 
-            "notify": "1,9\n", 
-            "starttime": 1437255423.247005, 
+            "guess": "6,1\n", 
+            "elapsed": 0.012382984161376953, 
+            "turnnum": 38, 
+            "notify": "6,1\n", 
+            "starttime": 1437258221.372569, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "2,6\n", 
+            "elapsed": 0.033297061920166016, 
+            "turnnum": 39, 
+            "notify": "2,6\n", 
+            "starttime": 1437258221.384961, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "7,1\n", 
+            "elapsed": 0.013350963592529297, 
+            "turnnum": 40, 
+            "notify": "7,1\n", 
+            "starttime": 1437258221.418274, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "3,4\n", 
+            "elapsed": 0.030904054641723633, 
+            "turnnum": 41, 
+            "notify": "3,4\n", 
+            "starttime": 1437258221.43164, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "8,1\n", 
+            "elapsed": 0.011951208114624023, 
+            "turnnum": 42, 
+            "notify": "8,1\n", 
+            "starttime": 1437258221.462556, 
+            "active": 1, 
+            "response": "SA"
+        }, 
+        {
+            "guess": "3,5\n", 
+            "elapsed": 0.03136777877807617, 
+            "turnnum": 43, 
+            "notify": "3,5\n", 
+            "starttime": 1437258221.474517, 
+            "active": 0, 
+            "response": "H"
+        }, 
+        {
+            "guess": "9,1\n", 
+            "elapsed": 0.013099908828735352, 
+            "turnnum": 44, 
+            "notify": "9,1\n", 
+            "starttime": 1437258221.505897, 
             "active": 1, 
             "response": "M"
         }, 
         {
-            "guess": "8,5\n", 
-            "elapsed": 0.006874799728393555, 
-            "turnnum": 135, 
-            "notify": "8,5\n", 
-            "starttime": 1437255423.294135, 
+            "guess": "4,5\n", 
+            "elapsed": 0.03208208084106445, 
+            "turnnum": 45, 
+            "notify": "4,5\n", 
+            "starttime": 1437258221.519007, 
+            "active": 0, 
+            "response": "SS"
+        }, 
+        {
+            "guess": "7,2\n", 
+            "elapsed": 0.014927864074707031, 
+            "turnnum": 46, 
+            "notify": "7,2\n", 
+            "starttime": 1437258221.551105, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "4,6\n", 
+            "elapsed": 0.03260993957519531, 
+            "turnnum": 47, 
+            "notify": "4,6\n", 
+            "starttime": 1437258221.566045, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "7,0\n", 
+            "elapsed": 0.015210866928100586, 
+            "turnnum": 48, 
+            "notify": "7,0\n", 
+            "starttime": 1437258221.598664, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "5,5\n", 
+            "elapsed": 0.025439977645874023, 
+            "turnnum": 49, 
+            "notify": "5,5\n", 
+            "starttime": 1437258221.613885, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "6,0\n", 
+            "elapsed": 0.01674199104309082, 
+            "turnnum": 50, 
+            "notify": "6,0\n", 
+            "starttime": 1437258221.639334, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "1,2\n", 
+            "elapsed": 0.022899866104125977, 
+            "turnnum": 51, 
+            "notify": "1,2\n", 
+            "starttime": 1437258221.656089, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "6,1\n", 
+            "elapsed": 0.021255970001220703, 
+            "turnnum": 52, 
+            "notify": "6,1\n", 
+            "starttime": 1437258221.678999, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "3,2\n", 
+            "elapsed": 0.01875782012939453, 
+            "turnnum": 53, 
+            "notify": "3,2\n", 
+            "starttime": 1437258221.700267, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "3,2\n", 
+            "elapsed": 0.03092503547668457, 
+            "turnnum": 54, 
+            "notify": "3,2\n", 
+            "starttime": 1437258221.719035, 
+            "active": 1, 
+            "response": "SB"
+        }, 
+        {
+            "guess": "3,6\n", 
+            "elapsed": 0.011401891708374023, 
+            "turnnum": 55, 
+            "notify": "3,6\n", 
+            "starttime": 1437258221.749977, 
             "active": 0, 
             "response": "M"
         }, 
         {
             "guess": "2,2\n", 
-            "elapsed": 0.04165005683898926, 
-            "turnnum": 136, 
+            "elapsed": 0.03232979774475098, 
+            "turnnum": 56, 
             "notify": "2,2\n", 
-            "starttime": 1437255423.30102, 
+            "starttime": 1437258221.761387, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "3,1\n", 
+            "elapsed": 0.011069059371948242, 
+            "turnnum": 57, 
+            "notify": "3,1\n", 
+            "starttime": 1437258221.79373, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "2,1\n", 
+            "elapsed": 0.032540082931518555, 
+            "turnnum": 58, 
+            "notify": "2,1\n", 
+            "starttime": 1437258221.804811, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "1,7\n", 
+            "elapsed": 0.012751102447509766, 
+            "turnnum": 59, 
+            "notify": "1,7\n", 
+            "starttime": 1437258221.837369, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "3,3\n", 
+            "elapsed": 0.03168606758117676, 
+            "turnnum": 60, 
+            "notify": "3,3\n", 
+            "starttime": 1437258221.850137, 
             "active": 1, 
             "response": "M"
         }, 
         {
-            "guess": "5,6\n", 
-            "elapsed": 0.01631617546081543, 
-            "turnnum": 137, 
-            "starttime": 1437255423.342686, 
+            "guess": "4,2\n", 
+            "elapsed": 0.012748003005981445, 
+            "turnnum": 61, 
+            "notify": "4,2\n", 
+            "starttime": 1437258221.881842, 
             "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "1,2\n", 
+            "elapsed": 0.032060861587524414, 
+            "turnnum": 62, 
+            "notify": "1,2\n", 
+            "starttime": 1437258221.894602, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "0,3\n", 
+            "elapsed": 0.011036872863769531, 
+            "turnnum": 63, 
+            "notify": "0,3\n", 
+            "starttime": 1437258221.926676, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "1,1\n", 
+            "elapsed": 0.032772064208984375, 
+            "turnnum": 64, 
+            "notify": "1,1\n", 
+            "starttime": 1437258221.937727, 
+            "active": 1, 
+            "response": "SP"
+        }, 
+        {
+            "guess": "5,9\n", 
+            "elapsed": 0.014345884323120117, 
+            "turnnum": 65, 
+            "notify": "5,9\n", 
+            "starttime": 1437258221.970515, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "0,1\n", 
+            "elapsed": 0.028937816619873047, 
+            "turnnum": 66, 
+            "notify": "0,1\n", 
+            "starttime": 1437258221.984872, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "1,6\n", 
+            "elapsed": 0.01820206642150879, 
+            "turnnum": 67, 
+            "notify": "1,6\n", 
+            "starttime": 1437258222.013828, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "1,1\n", 
+            "elapsed": 0.025005102157592773, 
+            "turnnum": 68, 
+            "notify": "1,1\n", 
+            "starttime": 1437258222.032049, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "3,0\n", 
+            "elapsed": 0.02385997772216797, 
+            "turnnum": 69, 
+            "notify": "3,0\n", 
+            "starttime": 1437258222.057074, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "6,1\n", 
+            "elapsed": 0.02089095115661621, 
+            "turnnum": 70, 
+            "notify": "6,1\n", 
+            "starttime": 1437258222.080948, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "6,0\n", 
+            "elapsed": 0.0265500545501709, 
+            "turnnum": 71, 
+            "notify": "6,0\n", 
+            "starttime": 1437258222.101858, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "8,0\n", 
+            "elapsed": 0.015717029571533203, 
+            "turnnum": 72, 
+            "notify": "8,0\n", 
+            "starttime": 1437258222.128425, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "7,8\n", 
+            "elapsed": 0.027756929397583008, 
+            "turnnum": 73, 
+            "notify": "7,8\n", 
+            "starttime": 1437258222.144151, 
+            "active": 0, 
+            "response": "H"
+        }, 
+        {
+            "guess": "7,2\n", 
+            "elapsed": 0.017925024032592773, 
+            "turnnum": 74, 
+            "notify": "7,2\n", 
+            "starttime": 1437258222.171923, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "6,8\n", 
+            "elapsed": 0.024358034133911133, 
+            "turnnum": 75, 
+            "notify": "6,8\n", 
+            "starttime": 1437258222.189859, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "5,0\n", 
+            "elapsed": 0.018449068069458008, 
+            "turnnum": 76, 
+            "notify": "5,0\n", 
+            "starttime": 1437258222.214227, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "7,9\n", 
+            "elapsed": 0.02714991569519043, 
+            "turnnum": 77, 
+            "notify": "7,9\n", 
+            "starttime": 1437258222.232686, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "1,0\n", 
+            "elapsed": 0.016725778579711914, 
+            "turnnum": 78, 
+            "notify": "1,0\n", 
+            "starttime": 1437258222.259848, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "7,7\n", 
+            "elapsed": 0.030498027801513672, 
+            "turnnum": 79, 
+            "notify": "7,7\n", 
+            "starttime": 1437258222.276584, 
+            "active": 0, 
+            "response": "H"
+        }, 
+        {
+            "guess": "2,3\n", 
+            "elapsed": 0.014551877975463867, 
+            "turnnum": 80, 
+            "notify": "2,3\n", 
+            "starttime": 1437258222.3071, 
+            "active": 1, 
+            "response": "SS"
+        }, 
+        {
+            "guess": "6,7\n", 
+            "elapsed": 0.027164936065673828, 
+            "turnnum": 81, 
+            "notify": "6,7\n", 
+            "starttime": 1437258222.321667, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "1,3\n", 
+            "elapsed": 0.015709877014160156, 
+            "turnnum": 82, 
+            "notify": "1,3\n", 
+            "starttime": 1437258222.348844, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "8,7\n", 
+            "elapsed": 0.030393123626708984, 
+            "turnnum": 83, 
+            "notify": "8,7\n", 
+            "starttime": 1437258222.364565, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "1,0\n", 
+            "elapsed": 0.014173030853271484, 
+            "turnnum": 84, 
+            "notify": "1,0\n", 
+            "starttime": 1437258222.39497, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "7,6\n", 
+            "elapsed": 0.031103134155273438, 
+            "turnnum": 85, 
+            "notify": "7,6\n", 
+            "starttime": 1437258222.409154, 
+            "active": 0, 
+            "response": "H"
+        }, 
+        {
+            "guess": "8,2\n", 
+            "elapsed": 0.012797832489013672, 
+            "turnnum": 86, 
+            "notify": "8,2\n", 
+            "starttime": 1437258222.440277, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "6,6\n", 
+            "elapsed": 0.028289079666137695, 
+            "turnnum": 87, 
+            "notify": "6,6\n", 
+            "starttime": 1437258222.453086, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "8,3\n", 
+            "elapsed": 0.016546010971069336, 
+            "turnnum": 88, 
+            "notify": "8,3\n", 
+            "starttime": 1437258222.481384, 
+            "active": 1, 
+            "response": "H"
+        }, 
+        {
+            "guess": "8,6\n", 
+            "elapsed": 0.027019023895263672, 
+            "turnnum": 89, 
+            "notify": "8,6\n", 
+            "starttime": 1437258222.497941, 
+            "active": 0, 
+            "response": "M"
+        }, 
+        {
+            "guess": "7,3\n", 
+            "elapsed": 0.016683101654052734, 
+            "turnnum": 90, 
+            "notify": "7,3\n", 
+            "starttime": 1437258222.524972, 
+            "active": 1, 
+            "response": "M"
+        }, 
+        {
+            "guess": "7,5\n", 
+            "elapsed": 0.028007030487060547, 
+            "turnnum": 91, 
+            "notify": "7,5\n", 
+            "starttime": 1437258222.541667, 
+            "active": 0, 
+            "response": "H"
+        }, 
+        {
+            "guess": "8,4\n", 
+            "elapsed": 0.015566110610961914, 
+            "turnnum": 92, 
+            "starttime": 1437258222.569687, 
+            "active": 1, 
             "response": "W"
         }
     ], 
-    "winner": 0, 
+    "winner": 1, 
     "p1stdout": "", 
     "player1board": {
-        "0,6": "S", 
-        "9,4": "A", 
-        "0,4": "S", 
-        "9,2": "A", 
-        "9,3": "A", 
-        "9,0": "A", 
-        "9,1": "A", 
-        "0,5": "S", 
-        "5,6": "B", 
-        "1,3": "D", 
-        "7,6": "B", 
-        "3,3": "D", 
-        "7,9": "P", 
-        "8,9": "P", 
-        "8,6": "B", 
-        "2,3": "D", 
-        "6,6": "B"
+        "7,8": "A", 
+        "3,9": "D", 
+        "4,5": "S", 
+        "1,9": "D", 
+        "3,5": "S", 
+        "7,4": "A", 
+        "7,5": "A", 
+        "7,6": "A", 
+        "7,7": "A", 
+        "2,9": "D", 
+        "2,8": "P", 
+        "2,5": "S", 
+        "2,4": "B", 
+        "2,7": "P", 
+        "2,1": "B", 
+        "2,3": "B", 
+        "2,2": "B"
     }, 
-    "player0": "hunter_parity.py", 
+    "player0": "hunter.py", 
     "player0board": {
-        "9,6": "P", 
-        "9,7": "P", 
-        "5,8": "D", 
-        "5,9": "S", 
-        "4,9": "S", 
-        "4,8": "D", 
-        "8,2": "B", 
-        "6,9": "S", 
-        "6,8": "D", 
-        "8,4": "B", 
+        "4,2": "B", 
+        "4,1": "A", 
+        "8,4": "D", 
+        "5,2": "B", 
+        "7,1": "A", 
+        "5,1": "A", 
+        "1,2": "P", 
+        "3,2": "B", 
+        "1,1": "P", 
+        "2,3": "S", 
+        "2,1": "S", 
         "6,1": "A", 
-        "6,0": "A", 
-        "6,3": "A", 
-        "6,2": "A", 
-        "8,3": "B", 
-        "6,4": "A", 
-        "8,1": "B"
+        "6,2": "B", 
+        "8,3": "D", 
+        "8,2": "D", 
+        "8,1": "A", 
+        "2,2": "S"
     }, 
-    "numturns": 137, 
+    "numturns": 92, 
     "p1stderr": "", 
-    "starttime": 1437255420.216448, 
-    "time": 3.1425700187683105, 
+    "starttime": 1437258220.44361, 
+    "time": 2.1416571140289307, 
     "p0stderr": "", 
     "id": 21, 
     "p0stdout": ""
