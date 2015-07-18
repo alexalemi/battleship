@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaderboard</title>
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="custom.css">
+  <!-- <base href="https://alexalemi.github.io/battleship/"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Battleship</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link" href="index.html">Home</a>
+        <a class="mdl-navigation__link" href="about.html">About</a>
+        <!-- <a class="mdl-navigation__link" href="about.html">About</a> -->
+        <!-- <a class="mdl-navigation__link" href="/players">Players</a> -->
+        <a class="mdl-navigation__link" href="games.html">Games</a>
+        <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship/">Github</a>
+      </nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Battleship</span>
+    <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="index.html">Home</a>
+        <a class="mdl-navigation__link" href="about.html">About</a>
+        <!-- <a class="mdl-navigation__link" href="about.html">About</a> -->
+        <!-- <a class="mdl-navigation__link" href="/players">Players</a> -->
+        <a class="mdl-navigation__link" href="games.html">Games</a>
+        <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship/">Github</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+var data; // a global
+
+d3.json("records/117.json", function(error, json) {
+  if (error) return console.warn(error);
+  data = json;
+});
+</script>
+
+<div class="game">
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+  <div class="mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+    
+    GAME CONTENT
+
+  </div>
+</div>
+</div>
+
+
+  </div>
+  </main>
+</div>
+
+</body>
+</html>

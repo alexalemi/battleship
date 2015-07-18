@@ -6,7 +6,7 @@
   <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="custom.css">
-  <!-- <base href="https://alexalemi.github.io/battleship/" target="_blank"> -->
+  <!-- <base href="https://alexalemi.github.io/battleship/"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -30,23 +30,28 @@
       </nav>
     </div>
   </header>
-  <!-- <div class="mdl-layout__drawer"> -->
-  <!--   <span class="mdl-layout-title">Battleship</span> -->
-  <!--   <nav class="mdl-navigation"> -->
-  <!--     <a class="mdl-navigation__link" href="">About</a> -->
-  <!--     <a class="mdl-navigation__link" href="">Players</a> -->
-  <!--     <a class="mdl-navigation__link" href="">Games</a> -->
-  <!--     <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship" class="mdl-badge">Github</a> -->
-  <!--   </nav> -->
-  <!-- </div> -->
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Battleship</span>
+    <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="index.html">Home</a>
+        <a class="mdl-navigation__link" href="about.html">About</a>
+        <!-- <a class="mdl-navigation__link" href="about.html">About</a> -->
+        <!-- <a class="mdl-navigation__link" href="/players">Players</a> -->
+        <a class="mdl-navigation__link" href="games.html">Games</a>
+        <a class="mdl-navigation__link" href="https://github.com/alexalemi/battleship/">Github</a>
+    </nav>
+  </div>
   <main class="mdl-layout__content">
     <div class="page-content"><!-- Your content goes here -->
 
     
-    <center> 
-    <br/><br/>
+    <div class="leaderboard">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+      <!-- <div class="mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col"> -->
+
     <!-- <h2>Leaderboard</h2> -->
-    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+    <table class="content mdl-cell mdl-cell--8-col mdl-data-table mdl-js-data-table mdl-shadow--2dp">
       <thead>
         <tr>
           <th>Rank</th>
@@ -65,73 +70,75 @@
         <tr>
           <td>1</td>
           <td class="mdl-data-table__cell-non-numeric">frederic.py</td>
-          <td>28.4826</td>
-          <td>31.4528</td>
-          <td>0.99006</td>
-          <td>102</td>
-          <td>23</td>
-          <td>13</td>
+          <td>31.0949</td>
+          <td>34.41</td>
+          <td>1.10506</td>
+          <td>110</td>
+          <td>15</td>
+          <td>6</td>
         </tr>
         
         <tr>
           <td>2</td>
           <td class="mdl-data-table__cell-non-numeric">hunter_parity.py</td>
-          <td>26.3045</td>
-          <td>29.2408</td>
-          <td>0.97876</td>
-          <td>87</td>
-          <td>38</td>
+          <td>27.9954</td>
+          <td>31.1414</td>
+          <td>1.04868</td>
+          <td>93</td>
+          <td>32</td>
           <td>0</td>
         </tr>
         
         <tr>
           <td>3</td>
-          <td class="mdl-data-table__cell-non-numeric">maxime.py</td>
-          <td>26.014</td>
-          <td>28.9041</td>
-          <td>0.963382</td>
+          <td class="mdl-data-table__cell-non-numeric">hunter.py</td>
+          <td>26.6721</td>
+          <td>29.7354</td>
+          <td>1.02107</td>
           <td>84</td>
           <td>41</td>
-          <td>3</td>
+          <td>0</td>
         </tr>
         
         <tr>
           <td>4</td>
-          <td class="mdl-data-table__cell-non-numeric">hunter.py</td>
-          <td>24.4913</td>
-          <td>27.3789</td>
-          <td>0.962549</td>
-          <td>70</td>
-          <td>55</td>
+          <td class="mdl-data-table__cell-non-numeric">tile.py</td>
+          <td>20.86</td>
+          <td>24.0156</td>
+          <td>1.05187</td>
+          <td>54</td>
+          <td>71</td>
           <td>0</td>
         </tr>
         
         <tr>
           <td>5</td>
-          <td class="mdl-data-table__cell-non-numeric">tile.py</td>
-          <td>16.0593</td>
-          <td>19.3151</td>
-          <td>1.08527</td>
-          <td>26</td>
-          <td>99</td>
+          <td class="mdl-data-table__cell-non-numeric">randguess.py</td>
+          <td>16.9165</td>
+          <td>20.5006</td>
+          <td>1.19469</td>
+          <td>34</td>
+          <td>91</td>
           <td>0</td>
         </tr>
         
         <tr>
           <td>6</td>
-          <td class="mdl-data-table__cell-non-numeric">randguess.py</td>
-          <td>9.31668</td>
-          <td>13.7597</td>
-          <td>1.48102</td>
-          <td>6</td>
-          <td>119</td>
+          <td class="mdl-data-table__cell-non-numeric">maxime.py</td>
+          <td>0.583777</td>
+          <td>7.07977</td>
+          <td>2.16533</td>
           <td>0</td>
+          <td>125</td>
+          <td>125</td>
         </tr>
         
       </tbody>
     </table>
-    </center>
 
+</div>
+</div>
+</div>
 
 
   </div>

@@ -1,42 +1,36 @@
 {
-    "winner": 0, 
+    "winner": 1, 
+    "player1": "frederic.py", 
     "turns": [
         {
-            "guess": "2,2\n", 
-            "elapsed": 0.004485130310058594, 
+            "active": 0, 
             "turnnum": 1, 
-            "notify": "2,2\n", 
-            "starttime": 1437125178.195757, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "guess": "2,5\n", 
-            "elapsed": 1.3317279815673828, 
-            "turnnum": 2, 
-            "notify": "2,5\n", 
-            "starttime": 1437125178.200256, 
-            "active": 1, 
-            "response": "H"
-        }, 
-        {
-            "guess": "7,7\n", 
-            "elapsed": 0.00960397720336914, 
-            "turnnum": 3, 
-            "notify": "7,7\n", 
-            "starttime": 1437125179.531994, 
-            "active": 0, 
-            "response": "M"
-        }, 
-        {
-            "active": 1, 
-            "turnnum": 4, 
-            "starttime": 1437125179.541611, 
-            "elapsed": 2.003843069076538
+            "starttime": 1437256351.842711, 
+            "elapsed": 2.002574920654297
         }
     ], 
-    "time": 3.669451951980591, 
+    "time": 2.641831874847412, 
     "p1stdout": "", 
+    "player1board": {
+        "6,2": "B", 
+        "9,2": "B", 
+        "4,6": "S", 
+        "4,4": "A", 
+        "3,4": "A", 
+        "5,6": "P", 
+        "3,6": "S", 
+        "1,2": "D", 
+        "5,4": "A", 
+        "8,2": "B", 
+        "0,2": "D", 
+        "7,2": "B", 
+        "5,5": "P", 
+        "2,4": "A", 
+        "2,6": "S", 
+        "6,4": "A", 
+        "2,2": "D"
+    }, 
+    "player0": "maxime.py", 
     "player0board": {
         "9,4": "S", 
         "8,4": "S", 
@@ -56,31 +50,11 @@
         "8,1": "P", 
         "6,6": "A"
     }, 
-    "player1board": {
-        "0,7": "D", 
-        "0,6": "D", 
-        "9,4": "S", 
-        "4,8": "P", 
-        "4,7": "P", 
-        "3,4": "B", 
-        "3,5": "B", 
-        "3,6": "B", 
-        "7,3": "A", 
-        "7,4": "S", 
-        "3,3": "B", 
-        "8,4": "S", 
-        "5,3": "A", 
-        "6,3": "A", 
-        "0,8": "D", 
-        "8,3": "A", 
-        "4,3": "A"
-    }, 
-    "player0": "maxime.py", 
-    "player1": "frederic.py", 
-    "numturns": 4, 
+    "numturns": 1, 
     "p1stderr": "", 
-    "starttime": 1437125177.876022, 
+    "starttime": 1437256351.203474, 
     "error": "there was a timeout error", 
     "p0stderr": "", 
+    "id": 257, 
     "p0stdout": ""
 }
