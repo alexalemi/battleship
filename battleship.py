@@ -195,10 +195,10 @@ class Process(object):
             boardstrings.append( self.readline(1).strip() )
         
         board = {}
-        for j,line in enumerate(boardstrings):
-            for i,c in enumerate(line):
+        for row,line in enumerate(boardstrings):
+            for col,c in enumerate(line):
                 if c != "0":
-                    board[(i,j)] = c
+                    board[(row,col)] = c
         return board
 
 class BoardError(Exception):
