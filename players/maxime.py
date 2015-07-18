@@ -149,16 +149,15 @@ class Player:
 
     # generate our board
     def board(self):
-        return ['0000000000',
-                '00000000PP',
-                '00B0000000',
-                '00B000A000',
-                '00B000ASSS',
-                '00BDDDA000',
-                '000000A000',
-                '000000A000',
-                '0000000000',
-                '0000000000']
+        board = {pos: '0' for pos in ALL_POSITIONS}
+
+        for ship, length in SHIP_LENGTH.items():
+            positions = list(all_ship_positions(length, lambda p: board[p] == '0'))
+            points = random.choice(positions)
+            for pos in points:
+                board[pos] = ship
+
+        return [[board[i, j] for j in range(10)] for i in range(10)]
 
     def guess(self):
         self._start_time = time.time()
