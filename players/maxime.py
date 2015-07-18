@@ -184,9 +184,6 @@ class Player:
             for pos in positions[0]:
                 self._hits.remove(pos)
 
-            if not self._hits: # no more hits
-                self.reset_proba_map()
-
         if not self._hits:
             return None
 
@@ -231,7 +228,8 @@ class Player:
 
     def guess_hunting_mode(self):
         logging.debug('[guess] hunting mode')
-        self.fill_proba_map(800)
+        self.reset_proba_map()
+        self.fill_proba_map(7000)
         positions = [(i, j) for i, j in ALL_POSITIONS if (i + j) % self._parity_mod == self._parity_val]
         return self.shoot(positions)
 
@@ -239,8 +237,28 @@ class Player:
         self._proba_map = {pos: 0 for pos in ALL_POSITIONS}
 
     def fill_proba_map(self, iterations):
+        # optimized version of fill_proba_map
+        ships_possible_positions = {}
+        for ship in self._ships:
+            length = SHIP_LENGTH[ship]
+            positions = all_ship_positions(length, lambda p: self._board[p] == ' ')
+            ships_possible_positions[ship] = list(positions)
+
+        ships_order = list(self._ships)
+        ships_order.sort(key=lambda ship: len(ships_possible_positions[ship]), reverse=True)
+
         for _ in range(iterations):
-            ships = self.generate_random_ships()
+            ships = [] # list of ships (set of positions)
+            ships_positions = set() # taken positions
+
+            for ship in ships_order:
+                positions = ships_possible_positions[ship]
+                if ships: # not the first ship
+                    positions = [points for points in positions if len(points & ships_positions) == 0]
+                points = random.choice(positions)
+                ships.append(points)
+                ships_positions.update(points)
+
             for points in ships:
                 for pos in points:
                     self._proba_map[pos] += 1
