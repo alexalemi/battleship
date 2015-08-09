@@ -4,27 +4,16 @@
 #
 #
 
-# TODO: Only guessing on mod 2/3/4/5 squares
 # TODO: Probabilistic Guess Function
 # TODO: Account for likelihood that ships are not adjacent
 # TODO: Minimize Entropy Model
 
 import socket
+import time
 import util
 from copy import copy
 
-ascii_board = '0000000000\n0000000000\nB000000000\nB00000000A\nB00000000A\nB00000000A\n000000000A\nS00000000A\nS0DDD00000\nS0000000PP\n'
-
-# my_board = [['0','0','0','0','0','0','0','0','0','0'],
-# 			 ['0','0','0','0','0','0','0','0','0','0'],
-# 			 ['B','0','0','0','0','0','0','0','0','0'],
-# 			 ['B','0','0','0','0','0','0','0','0','A'],
-# 			 ['B','0','0','0','0','0','0','0','0','A'],
-# 			 ['B','0','0','0','0','0','0','0','0','A'],
-# 			 ['0','0','0','0','0','0','0','0','0','A'],
-# 			 ['S','0','0','0','0','0','0','0','0','A'],
-# 			 ['S','0','D','D','D','0','0','0','0','0'],
-# 			 ['S','0','0','0','0','0','0','0','P','P']]
+ascii_board = 'B00000000A\nB00000000A\nB00000000A\nB00000000A\n000000000A\n0000000000\n0000000000\nS000000000\nS000000000\nS0DDD000PP\n'
 
 TEST_BOARD = [['?','?','?','?','?','?','?','?','?','?'],
 			  ['?','?','?','?','?','?','?','?','?','?'],
@@ -115,6 +104,33 @@ def generate_question_mark_board():
 			row.append('?')
 		board.append(row)
 	return board
+
+def generate_scoring_board():
+	"""
+	Generates a board of values used to score your arrangement of ships
+	"""
+	scoring_board = board_possibility_counter(BOARD)
+	max_possibilites = scoring_board[4][4]
+	for row in range(10):
+		for col in range(10):
+			scoring_board[row][col] = max_possibilites - scoring_board[row][col]
+	return scoring_board
+
+def generate_playing_board(duration):
+	"""
+	Generates a random playing board
+	"""
+	timeout = time.time() + duration
+	random_board_string = util.gen_random_board_str()
+	max_score = score(read_board(random_board_string))
+	while time.time() < timeout:
+		new_random_board_string = util.gen_random_board_str()
+		new_score = score(read_board(new_random_board_string))
+		if new_score > max_score:
+			random_board_string = new_random_board_string
+			max_score = new_score
+			print max_score
+	return random_board_string
 
 def x_in_board(board):
 	"""
@@ -282,6 +298,18 @@ def sunken_ship_update(board, row, col, ship):
 # CALCULATION FUNCTIONS
 #
 #
+
+def score(board):
+	"""
+	Returns the score of a board according to the scoring board
+	"""
+	scoring_board = generate_scoring_board()
+	score = 0
+	for row in range(10):
+		for col in range(10):
+			if board[row][col] != '0':
+				score += scoring_board[row][col]
+	return score
 
 def line_possibility_counter(spaces1, spaces2, given_spaces, ships):
 	"""
@@ -487,7 +515,8 @@ def play_game():
 	turn, opponent = initstring.split(",")
 
 	# Send my board
-	genboard = util.gen_random_board_str()
+	genboard = generate_playing_board(1.95)
+	# genboard = ascii_board
 	for line in genboard.splitlines():
 	    comm.sendline(line)
 
@@ -519,26 +548,5 @@ def play_game():
 			print "Game Finished"
 
 
-####################################################################################################
-# TESTING
-#
-#
-
-# play_game()
-# print fire(TEST_BOARD)
-# board = BOARD
-# foo =  update_board(board, 4, 4, 'M')
-# print_board(board)
-# print
-# print_board(foo)
-# guess = fire(board)
-# print guess
-# print
-# print_board(foo)
-# guess = fire(board)
-# print guess
-# print_board(sunken_ship_update(TEST_BOARD, 1, 0, 'S'))
-# their_board = read_board(ascii_board)
-# print_board(their_board)
-# print play_game(their_board)
+play_game()
 
