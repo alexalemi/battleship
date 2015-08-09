@@ -438,10 +438,14 @@ class BattleshipGame(object):
 
             # self.record['p0stdin'] = self.p0.p.p.stdin.read()
             self.record['p0stdout'] = self.p0.p.p.stdout.read()
+            logger.info("p0stdout, %s", self.record['p0stdout'])
             self.record['p0stderr'] = self.p0.p.p.stderr.read()
+            logger.info("p0stderr, %s", self.record['p0stderr'])
             # self.record['p1stdin'] = self.p1.p.p.stdin.read()
             self.record['p1stdout'] = self.p1.p.p.stdout.read()
+            logger.info("p1stdout, %s", self.record['p1stdout'])
             self.record['p1stderr'] = self.p1.p.p.stderr.read()
+            logger.info("p1stderr, %s", self.record['p1stderr'])
             self.saverecord()
 
             self.p0.p.p.kill()
@@ -498,9 +502,11 @@ def unpackgame(opps):
 def unpackres(opps):
     out = game(*opps)
     if out == 0:
-        return (opps[0], opps[1])
+        result = (opps[0], opps[1])
     else:
-        return (opps[1], opps[0])
+        result = (opps[1], opps[0])
+    print "{} beat {}".format(result[0], result[1])
+    return result
 
 def match(opp0, opp1, N=DEFAULTN):
     """ Run a match between opp0 and opp1, which consists of N games """
@@ -625,7 +631,7 @@ if __name__ == "__main__":
         SAVERECORD = True
         leaderboard(players=args.leaderboard, N=args.n or DEFAULTN)
     elif args.tournament is not None:
-        print tourney(players=args.tournmanet, N=args.n or DEFAULTN)
+        print tourney(players=args.tournament, N=args.n or DEFAULTN)
     elif args.battle is not None:
         N = args.n or 1
         for i in xrange(N):
