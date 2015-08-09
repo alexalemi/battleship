@@ -524,8 +524,8 @@ def play_game():
 #
 #
 
-print fire(TEST_BOARD)
 # play_game()
+# print fire(TEST_BOARD)
 # board = BOARD
 # foo =  update_board(board, 4, 4, 'M')
 # print_board(board)
