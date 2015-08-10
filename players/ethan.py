@@ -13,7 +13,7 @@ import time
 import util
 from copy import copy
 
-ascii_board = 'B00000000A\nB00000000A\nB00000000A\nB00000000A\n000000000A\n0000000000\n0000000000\nS000000000\nS000000000\nS0DDD000PP\n'
+ascii_board = 'A00000000B\nA00000000B\nA00000000B\nA00000000B\nA000000000\n0000000000\n0000000000\n0000000000\nP000000000\nP00DDD0SSS\n'
 
 TEST_BOARD = [['?','?','?','?','?','?','?','?','?','?'],
 			  ['?','?','?','?','?','?','?','?','?','?'],
@@ -37,6 +37,10 @@ BOARD = [['?','?','?','?','?','?','?','?','?','?'],
 		 ['?','?','?','?','?','?','?','?','?','?'],
 		 ['?','?','?','?','?','?','?','?','?','?']]
 
+NON_HUMAN_OPPONENTS = ['players/hunter_parity.py',
+					   'players/hunter.py',
+					   'players/randguess.py',
+					   'players/tile.py']
 SHIPS = ['A', 'B', 'D', 'P', 'S']
 SHIP_SIZE = {'A':5, 'B':4, 'D':3, 'P':2, 'S':3}
 
@@ -513,10 +517,13 @@ def play_game():
 	comm = util.Communication()
 	initstring = comm.readline()
 	turn, opponent = initstring.split(",")
+	opponent = opponent.strip()
 
-	# Send my board
-	genboard = generate_playing_board(1.95)
-	# genboard = ascii_board
+	# Generate and send my board
+	if opponent in NON_HUMAN_OPPONENTS:
+		genboard = ascii_board
+	else:
+		genboard = generate_playing_board(1.95)
 	for line in genboard.splitlines():
 	    comm.sendline(line)
 
