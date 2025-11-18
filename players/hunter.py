@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-""" 
+#!/usr/bin/env python3
+"""
 Author: Alex Alemi
 
 This strategy aims to serve as a simple baseline
@@ -52,7 +52,7 @@ huntmode = True
 # an eventual randomized priority queue that will store our targets
 targets = []
 guesses = set()
-allpos = { (i,j) for i in xrange(10) for j in xrange(10) }
+allpos = { (i,j) for i in range(10) for j in range(10) }
 
 while True:
     try:

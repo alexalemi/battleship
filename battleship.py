@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """
 Author: Alex Alemi
 
@@ -148,7 +148,7 @@ class Process(object):
         self.sock.listen(1)
         logger.debug("Waiting for connection...")
         self.connection, self.client_address = self.sock.accept()
-        self.connection_file = self.connection.makefile("r+", bufsize=BUFFER)
+        self.connection_file = self.connection.makefile("rw", buffering=BUFFER)
 
     def __del__(self):
         # clean up the process and port
@@ -191,7 +191,7 @@ class Process(object):
         """ Read an entire board """
         logger.debug("Attempting to read a board from %s", self.shortname)
         boardstrings = []
-        for i in xrange(10):
+        for i in range(10):
             boardstrings.append( self.readline(1).strip() )
         
         board = {}
@@ -297,10 +297,10 @@ class BattleshipGame(object):
             self.p1.initialize_process()
             player = 0
             self.p0.read_board()
-            self.record["player0board"] = { "{},{}".format(*k):v for k,v in self.p0.board.iteritems() }
+            self.record["player0board"] = { "{},{}".format(*k):v for k,v in self.p0.board.items() }
             player = 1
             self.p1.read_board()
-            self.record["player1board"] = { "{},{}".format(*k):v for k,v in self.p1.board.iteritems() }
+            self.record["player1board"] = { "{},{}".format(*k):v for k,v in self.p1.board.items() }
             self._validate_boards()
         except BoardError as e:
             logger.exception("Got a board error for player %d", player)
@@ -461,8 +461,8 @@ class BattleshipGame(object):
             logger.warning("Board has an invalid ship count")
             return False
         # now check to make sure each ship is co-linear, and has the right range
-        for ship,length in SHIP_LENGTHS.iteritems():
-            pairs = [ k for k,v in board.iteritems() if v==ship ]
+        for ship,length in SHIP_LENGTHS.items():
+            pairs = [ k for k,v in board.items() if v==ship ]
             xs = [ k[0] for k in pairs ]
             ys = [ k[1] for k in pairs ]
 
@@ -505,13 +505,13 @@ def unpackres(opps):
         result = (opps[0], opps[1])
     else:
         result = (opps[1], opps[0])
-    print "{} beat {}".format(result[0], result[1])
+    print("{} beat {}".format(result[0], result[1]))
     return result
 
 def match(opp0, opp1, N=DEFAULTN):
     """ Run a match between opp0 and opp1, which consists of N games """
     with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
-        return [res for res in executor.map(unpackgame, ((opp0,opp1,i) for i in xrange(N)))]
+        return [res for res in executor.map(unpackgame, ((opp0,opp1,i) for i in range(N)))]
 
 def getplayers():
     candidates = os.listdir(PLAYERPATH)
@@ -531,7 +531,7 @@ def tourney(players=None, N=DEFAULTN):
     with concurrent.futures.ProcessPoolExecutor(max_workers=WORKERS) as executor:
         matchups = []
         for combo in combos:
-            for i in xrange(N):
+            for i in range(N):
                 matchups.append((combo[0],combo[1],gameno))
                 gameno += 1
         allgames = [res for res in executor.map(unpackres, matchups)]
@@ -576,7 +576,7 @@ def leaderboard(players=None, N=DEFAULTN, filename="leaderboard.txt"):
     logger.info("Generating a leaderboard for players: %r, N=%d", players, N)
     ratings, allgames, players = get_ratings(players, N)
     board, table = make_leaderboard(ratings, allgames, players)
-    print table
+    print(table)
     if filename:
         logger.info("Saving leaderboard to file: %s", filename)
         with open(filename,"w") as f:
@@ -601,7 +601,8 @@ parser.add_argument("--verbose", '-v', default=0, action='count', help="Verbosit
 parser.add_argument("--records", '-r', default=RECORDPATH, help="Path to records")
 parser.add_argument("--playerpath", '-p', default=PLAYERPATH, help="Path to players")
 
-if __name__ == "__main__":
+def main():
+    """Main entry point for the battleship tournament"""
     args = parser.parse_args()
    
     # Setup verbosity
@@ -610,7 +611,7 @@ if __name__ == "__main__":
     if args.verbose == 1:
         ch.setLevel(logging.INFO)
     elif args.verbose > 1:
-        print "SETTING DEBUG"
+        print("SETTING DEBUG")
         ch.setLevel(logging.DEBUG)
     ch.setFormatter(formatter)
     logger.addHandler(ch)
@@ -631,14 +632,15 @@ if __name__ == "__main__":
         SAVERECORD = True
         leaderboard(players=args.leaderboard, N=args.n or DEFAULTN)
     elif args.tournament is not None:
-        print tourney(players=args.tournament, N=args.n or DEFAULTN)
+        print(tourney(players=args.tournament, N=args.n or DEFAULTN))
     elif args.battle is not None:
         N = args.n or 1
-        for i in xrange(N):
-            print "Result for game {}: {}".format(i, game(args.battle[0], args.battle[1]))
+        for i in range(N):
+            print("Result for game {}: {}".format(i, game(args.battle[0], args.battle[1])))
     else:
-        print "Must choose one of battle, tournament, or leaderboard"
+        print("Must choose one of battle, tournament, or leaderboard")
         parser.print_help()
         sys.exit(1)
 
-
+if __name__ == "__main__":
+    main()

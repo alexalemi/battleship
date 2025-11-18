@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 """ This strategy simply
 tries successive guesses, trying to tile

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 """
 Author: Alex Alemi
@@ -37,7 +37,7 @@ for line in board.splitlines():
 # Now have the main loop, alternating whether its our
 # turn or not
 
-allpos = set( (i,j) for i in xrange(10) for j in xrange(10) )
+allpos = set( (i,j) for i in range(10) for j in range(10) )
 guesses = set()
 
 guessno = 0

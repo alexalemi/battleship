@@ -13,8 +13,8 @@ ship_sizes = {"A": 5, "B": 4, "D": 3, "S": 3, "P": 2}
 def board_str(board):
     """ Return the many lined string for a board """
     boardstr = ""
-    for i in xrange(10):
-        for j in xrange(10):
+    for i in range(10):
+        for j in range(10):
             if (i,j) in board:
                 boardstr += board[(i,j)]
             else:
@@ -32,7 +32,7 @@ def gen_random_board():
             # if we are trying to place it horizontally
             xpos = randrange(10-size)
             ypos = randrange(10)
-            for i in xrange(size):
+            for i in range(size):
                 loc = (xpos+i, ypos)
                 if board.get(loc):
                     # we have a collision
@@ -43,7 +43,7 @@ def gen_random_board():
             # if we are trying to place it vertically
             xpos = randrange(10)
             ypos = randrange(10-size)
-            for i in xrange(size):
+            for i in range(size):
                 loc = (xpos, ypos+i)
                 if board.get(loc):
                     # we have a collision
@@ -56,7 +56,7 @@ def gen_random_board():
     while not done:
         # Generate boards until we manage to not fail
         board = {}
-        for ship,size in ship_sizes.iteritems():
+        for ship,size in ship_sizes.items():
             try:
                 board = place_ship(board, ship)
             except IndexError:
@@ -74,9 +74,9 @@ class LocalCommunication(object):
         which can be used to locally test your 
         program 
     """
-    
+
     def readline(self):
-        msg = raw_input()
+        msg = input()
         return msg
 
     def sendline(self,msg):
@@ -98,7 +98,7 @@ class Communication(object):
         self.server_address = ('localhost', self.port)
         logging.debug("Connection to %r", self.server_address)
         self.sock.connect(self.server_address)
-        self.sock_file = self.sock.makefile("rw")
+        self.sock_file = self.sock.makefile("rw", buffering=1)
         logging.debug("Connected")
 
     def readline(self):
