@@ -94,11 +94,21 @@ battleship --tournament -p ./my_players
 battleship --tournament -w 4
 
 # Set move timeout in seconds (default: 2)
+# IMPORTANT: Use --timeout 5 for maxime.py which is computationally intensive
 battleship --tournament --timeout 5
 
 # Verbose logging
 battleship --battle players/hunter.py players/randguess.py -vv
 ```
+
+### Performance Note
+
+Some player bots are computationally intensive:
+- **maxime.py** (~1.9s per move) - Requires `--timeout 5` or higher
+- **frederic.py** (~0.5s per move) - Works with default timeout
+- **Other bots** (<0.1s per move) - Very fast
+
+See [PERFORMANCE.md](PERFORMANCE.md) for detailed performance information and tournament duration estimates.
 
 ## Communication Protocol
 

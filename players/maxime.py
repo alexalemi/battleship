@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 import logging
 import random
 import socket
@@ -61,7 +61,7 @@ class TCPGame(Game):
         super().__init__(player)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect(('localhost', port))
-        self.sock_in = self.sock.makefile('r')
+        self.sock_in = self.sock.makefile('r', buffering=1)
 
     def read_line(self):
         return self.sock_in.readline().strip()
